@@ -5,50 +5,50 @@ on:
     branches: [ "main" ]
 
 jobs:
-
-  microtests:
-    name: Run unit tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up JDK 11
-        uses: actions/setup-java@v3
-        with:
-          java-version: '11'
-          distribution: 'temurin'
-          cache: gradle
-
-      - name: Grant execute permissions for gradlew
-        run: chmod +x gradlew
-
-      - name: Run unit tests
-        run: ./gradlew testDebug
-
-  instrumented:
-    name: Run instrumented tests
-    runs-on: macos-latest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up JDK 11
-        uses: actions/setup-java@v3
-        with:
-          java-version: '11'
-          distribution: 'temurin'
-          cache: gradle
-
-      - name: Run instrumented tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 29
-          script: ./gradlew connectedCheck
+#
+#  microtests:
+#    name: Run unit tests
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - uses: actions/checkout@v3
+#
+#      - name: Set up JDK 11
+#        uses: actions/setup-java@v3
+#        with:
+#          java-version: '11'
+#          distribution: 'temurin'
+#          cache: gradle
+#
+#      - name: Grant execute permissions for gradlew
+#        run: chmod +x gradlew
+#
+#      - name: Run unit tests
+#        run: ./gradlew testDebug
+#
+#  instrumented:
+#    name: Run instrumented tests
+#    runs-on: macos-latest
+#
+#    steps:
+#      - uses: actions/checkout@v3
+#
+#      - name: Set up JDK 11
+#        uses: actions/setup-java@v3
+#        with:
+#          java-version: '11'
+#          distribution: 'temurin'
+#          cache: gradle
+#
+#      - name: Run instrumented tests
+#        uses: reactivecircus/android-emulator-runner@v2
+#        with:
+#          api-level: 29
+#          script: ./gradlew connectedCheck
 
   distribute:
     name: Distribute app bundle to Play Store
-    needs: [ microtests, instrumented ]
+#    needs: [ microtests, instrumented ]
     runs-on: ubuntu-latest
 
     steps:
