@@ -16,6 +16,7 @@ class SignUpViewModel(private val credentialsValidator: RegexCredentialsValidato
 		_mutableSignUpState.value = when (result) {
 			CredentialsValidationResult.InvalidEmail -> SignUpState.BadEmail
 			CredentialsValidationResult.InvalidPassword -> SignUpState.BadPassword
+			CredentialsValidationResult.Valid -> TODO()
 		}
 	}
 }
