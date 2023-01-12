@@ -76,20 +76,30 @@ private fun EmailField(value: String, onValueChange: (String) -> Unit) {
 @Composable
 private fun PasswordField(value: String, onValueChange: (String) -> Unit) {
 	var isPasswordVisible by remember { mutableStateOf(false) }
+	val visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation()
 
 	OutlinedTextField(
 		modifier = Modifier.fillMaxWidth(),
 		value = value,
 		trailingIcon = {
-			IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
-				Icon(
-					painter = painterResource(id = if (isPasswordVisible) R.drawable.ic_password_hide else R.drawable.ic_password_show),
-					contentDescription = stringResource(id = R.string.action_togglePasswordVisiblitiy)
-				)
+			VisibilityToggle(isPasswordVisible) {
+				isPasswordVisible = !isPasswordVisible
 			}
 		},
-		visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+		visualTransformation = visualTransformation,
 		label = { Text(text = stringResource(id = R.string.hint_password)) },
 		onValueChange = onValueChange
 	)
+}
+
+@Composable
+private fun VisibilityToggle(value: Boolean, onToggle: () -> Unit) {
+	val painterId = if (value) R.drawable.ic_hide else R.drawable.ic_show
+
+	IconButton(onClick = onToggle) {
+		Icon(
+			painter = painterResource(id = painterId),
+			contentDescription = stringResource(id = R.string.action_toggleVisibility)
+		)
+	}
 }
