@@ -10,7 +10,7 @@ class SignUpViewModel {
 	val signUpState: LiveData<SignUpState> = _mutableSignUpState
 
 	fun createAccount(email: String, password: String, about: String) {
-		val result = validateCredentials(email, password)
+		val result = RegexCredentialsValidator().validateCredentials(email, password)
 
 		_mutableSignUpState.value = when (result) {
 			CredentialsValidationResult.InvalidEmail -> SignUpState.BadEmail
@@ -18,16 +18,18 @@ class SignUpViewModel {
 		}
 	}
 
-	private fun validateCredentials(email: String, password: String): CredentialsValidationResult {
-		val emailRegex = """[a-zA-Z0-9+._%\-]{1,64}@[a-zA-Z0-9][a-zA-Z0-9\-]{1,64}(\.[a-zA-Z0-9][a-zA-Z0-9\-]{1,25})"""
-		val passwordRegex = """""${'"'}^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#${'$'}%^&*+=\-]).{8,}${'$'}""${'"'}"""
+	class RegexCredentialsValidator {
+		fun validateCredentials(email: String, password: String): CredentialsValidationResult {
+			val emailRegex = """[a-zA-Z0-9+._%\-]{1,64}@[a-zA-Z0-9][a-zA-Z0-9\-]{1,64}(\.[a-zA-Z0-9][a-zA-Z0-9\-]{1,25})"""
+			val passwordRegex = """""${'"'}^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#${'$'}%^&*+=\-]).{8,}${'$'}""${'"'}"""
 
-		val result = when {
-			!Pattern.compile(emailRegex).matcher(email).matches() -> CredentialsValidationResult.InvalidEmail
-			!Pattern.compile(passwordRegex).matcher(password).matches() -> CredentialsValidationResult.InvalidPassword
-			else -> TODO()
+			val result = when {
+				!Pattern.compile(emailRegex).matcher(email).matches() -> CredentialsValidationResult.InvalidEmail
+				!Pattern.compile(passwordRegex).matcher(password).matches() -> CredentialsValidationResult.InvalidPassword
+				else -> TODO()
+			}
+			return result
 		}
-		return result
 	}
 }
 
