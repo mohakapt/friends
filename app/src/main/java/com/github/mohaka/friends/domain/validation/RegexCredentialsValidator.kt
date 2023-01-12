@@ -11,13 +11,9 @@ class RegexCredentialsValidator {
 	private val emailPattern = Pattern.compile(EMAIL_REGEX)
 	private val passwordPattern = Pattern.compile(PASSWORD_REGEX)
 
-
-	fun validate(email: String, password: String): CredentialsValidationResult {
-		val result = when {
-			!emailPattern.matcher(email).matches() -> CredentialsValidationResult.InvalidEmail
-			!passwordPattern.matcher(password).matches() -> CredentialsValidationResult.InvalidPassword
-			else -> CredentialsValidationResult.Valid
-		}
-		return result
+	fun validate(email: String, password: String) = when {
+		!emailPattern.matcher(email).matches() -> CredentialsValidationResult.InvalidEmail
+		!passwordPattern.matcher(password).matches() -> CredentialsValidationResult.InvalidPassword
+		else -> CredentialsValidationResult.Valid
 	}
 }
