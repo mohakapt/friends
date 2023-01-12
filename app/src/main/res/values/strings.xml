@@ -5,4 +5,5 @@
 	<string name="action_signUp">Sign Up</string>
 	<string name="title_timeline">Timeline</string>
 	<string name="text_createAccount">Create an account</string>
+	<string name="action_togglePasswordVisiblitiy">Toggle Password Visibility</string>
 </resources>
