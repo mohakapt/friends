@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
+import com.github.mohaka.friends.signup.SignUpScreen
 import com.github.mohaka.friends.ui.theme.FriendsTheme
 
 class MainActivity : ComponentActivity() {
@@ -14,23 +15,10 @@ class MainActivity : ComponentActivity() {
 		super.onCreate(savedInstanceState)
 		setContent {
 			FriendsTheme {
-					Greeting("Android")
 				Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
+					SignUpScreen()
 				}
 			}
 		}
-	}
-}
-
-@Composable
-fun Greeting(name: String) {
-	Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-	FriendsTheme {
-		Greeting("Android")
 	}
 }
