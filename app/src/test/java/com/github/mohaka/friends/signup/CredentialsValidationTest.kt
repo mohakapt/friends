@@ -30,9 +30,12 @@ class CredentialsValidationTest {
 
 	@ParameterizedTest
 	@CsvSource(
-		"'abcd'",
 		"''",
-		"'               '",
+		"'             '",
+		"'12345678'",
+		"'abcd5678'",
+		"'abcdef78#$'",
+		"'ABCDEF78#$'",
 	)
 	fun invalidPassword(password: String) {
 		val viewModel = SignUpViewModel()

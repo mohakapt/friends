@@ -1,6 +1,5 @@
 package com.github.mohaka.friends.signup
 
-import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.github.mohaka.friends.signup.state.SignUpState
@@ -12,9 +11,11 @@ class SignUpViewModel {
 
 	fun createAccount(email: String, password: String, about: String) {
 		val emailRegex = """[a-zA-Z0-9+._%\-]{1,64}@[a-zA-Z0-9][a-zA-Z0-9\-]{1,64}(\.[a-zA-Z0-9][a-zA-Z0-9\-]{1,25})"""
+		val passwordRegex = """""${'"'}^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#${'$'}%^&*+=\-]).{8,}${'$'}""${'"'}"""
+
 		if (!Pattern.compile(emailRegex).matcher(email).matches()) {
 			_mutableSignUpState.value = SignUpState.BadEmail
-		} else if (password.isBlank() || password.length < 6) {
+		} else if (!Pattern.compile(passwordRegex).matcher(password).matches()) {
 			_mutableSignUpState.value = SignUpState.BadPassword
 		}
 	}
