@@ -51,6 +51,19 @@ fun SignUpScreen() {
 }
 
 @Composable
+private fun ScreenTitle(@StringRes id: Int) {
+	Row(
+		modifier = Modifier.fillMaxWidth(),
+		horizontalArrangement = Arrangement.Center
+	) {
+		Text(
+			text = stringResource(id),
+			style = typography.h4
+		)
+	}
+}
+
+@Composable
 private fun EmailField(value: String, onValueChange: (String) -> Unit) {
 	OutlinedTextField(
 		modifier = Modifier.fillMaxWidth(),
@@ -79,17 +92,4 @@ private fun PasswordField(value: String, onValueChange: (String) -> Unit) {
 		label = { Text(text = stringResource(id = R.string.hint_password)) },
 		onValueChange = onValueChange
 	)
-}
-
-@Composable
-private fun ScreenTitle(@StringRes id: Int) {
-	Row(
-		modifier = Modifier.fillMaxWidth(),
-		horizontalArrangement = Arrangement.Center
-	) {
-		Text(
-			text = stringResource(id),
-			style = typography.h4
-		)
-	}
 }
