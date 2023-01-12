@@ -5,7 +5,7 @@ import com.github.mohaka.friends.MainActivity
 import org.junit.Rule
 import org.junit.Test
 
-class SignUpTest {
+class SignUpScreenTest {
 
 	@get:Rule
 	val signUpTestRule = createAndroidComposeRule<MainActivity>()
