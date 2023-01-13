@@ -10,7 +10,7 @@ import com.github.mohaka.friends.signup.state.SignUpState
 class SignUpViewModel(private val credentialsValidator: RegexCredentialsValidator) {
 	private val _mutableSignUpState = MutableLiveData<SignUpState>()
 	val signUpState: LiveData<SignUpState> = _mutableSignUpState
-	private val userCatalog = InMemoryUserCatalog()
+	val userRepository = UserRepository(InMemoryUserCatalog())
 
 	fun createAccount(email: String, password: String, about: String) {
 		val result = credentialsValidator.validate(email, password)
@@ -18,11 +18,13 @@ class SignUpViewModel(private val credentialsValidator: RegexCredentialsValidato
 		_mutableSignUpState.value = when (result) {
 			CredentialsValidationResult.InvalidEmail -> SignUpState.BadEmail
 			CredentialsValidationResult.InvalidPassword -> SignUpState.BadPassword
-			CredentialsValidationResult.Valid -> signUp(email, password, about)
+			CredentialsValidationResult.Valid -> userRepository.signUp(email, password, about)
 		}
 	}
+}
 
-	private fun signUp(email: String, password: String, about: String) = try {
+class UserRepository(private val userCatalog: InMemoryUserCatalog) {
+	public fun signUp(email: String, password: String, about: String) = try {
 		val user = userCatalog.createUser(email, password, about)
 		SignUpState.SignedUp(user)
 	} catch (e: DuplicateAccountException) {
