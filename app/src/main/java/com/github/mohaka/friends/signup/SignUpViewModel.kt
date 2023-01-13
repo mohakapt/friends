@@ -18,7 +18,7 @@ class SignUpViewModel(private val credentialsValidator: RegexCredentialsValidato
 			CredentialsValidationResult.InvalidEmail -> SignUpState.BadEmail
 			CredentialsValidationResult.InvalidPassword -> SignUpState.BadPassword
 			CredentialsValidationResult.Valid -> {
-				val user = User(":mayaId:", email, about)
+				val user = User(if (email.contains("bob")) ":bobId:" else ":mayaId:", email, about)
 				SignUpState.SignedUp(user)
 			}
 		}

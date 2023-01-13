@@ -17,4 +17,12 @@ class CreateAccountTest {
 		viewModel.createAccount(maya.email, "MaYa@2021", maya.about)
 		assertEquals(SignUpState.SignedUp(maya), viewModel.signUpState.value)
 	}
+
+	@Test
+	fun anotherAccountCreated() {
+		val bob = User(":bobId:", "bob@friends.com", "about Bob");
+		val viewModel = SignUpViewModel(RegexCredentialsValidator())
+		viewModel.createAccount(bob.email, "BoB@2022", bob.about)
+		assertEquals(SignUpState.SignedUp(bob), viewModel.signUpState.value)
+	}
 }
