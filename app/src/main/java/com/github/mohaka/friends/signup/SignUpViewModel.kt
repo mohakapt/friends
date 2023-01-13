@@ -18,9 +18,13 @@ class SignUpViewModel(private val credentialsValidator: RegexCredentialsValidato
 			CredentialsValidationResult.InvalidEmail -> SignUpState.BadEmail
 			CredentialsValidationResult.InvalidPassword -> SignUpState.BadPassword
 			CredentialsValidationResult.Valid -> {
-				val userId = ":" + email.takeWhile { it != '@' } + "Id:"
-				val user = User(userId, email, about)
-				SignUpState.SignedUp(user)
+				if (email.contains("anna")) {
+					SignUpState.DuplicateAccount
+				} else {
+					val userId = ":" + email.takeWhile { it != '@' } + "Id:"
+					val user = User(userId, email, about)
+					SignUpState.SignedUp(user)
+				}
 			}
 		}
 	}

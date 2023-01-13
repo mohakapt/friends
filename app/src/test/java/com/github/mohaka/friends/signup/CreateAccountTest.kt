@@ -25,4 +25,14 @@ class CreateAccountTest {
 		viewModel.createAccount(bob.email, "BoB@2022", bob.about)
 		assertEquals(SignUpState.SignedUp(bob), viewModel.signUpState.value)
 	}
+
+	@Test
+	fun createDuplicateAccount() {
+		val anna = User(":annaId:", "anna@friens.com", "about Anna")
+		val viewModel = SignUpViewModel(RegexCredentialsValidator()).also {
+			it.createAccount(anna.email, "aNnA!2001", anna.about)
+		}
+		viewModel.createAccount(anna.email, "AnNa@2022", anna.about)
+		assertEquals(SignUpState.DuplicateAccount, viewModel.signUpState.value)
+	}
 }
