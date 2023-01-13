@@ -10,7 +10,7 @@ import com.github.mohaka.friends.signup.state.SignUpState
 class SignUpViewModel(private val credentialsValidator: RegexCredentialsValidator) {
 	private val _mutableSignUpState = MutableLiveData<SignUpState>()
 	val signUpState: LiveData<SignUpState> = _mutableSignUpState
-	private val users = arrayListOf<User>()
+	private val userCatalog = InMemoryUserCatalog()
 
 	fun createAccount(email: String, password: String, about: String) {
 		val result = credentialsValidator.validate(email, password)
@@ -23,26 +23,28 @@ class SignUpViewModel(private val credentialsValidator: RegexCredentialsValidato
 	}
 
 	private fun signUp(email: String, password: String, about: String) = try {
-		val user = createUser(email, password, about)
+		val user = userCatalog.createUser(email, password, about)
 		SignUpState.SignedUp(user)
 	} catch (e: DuplicateAccountException) {
 		SignUpState.DuplicateAccount
 	}
 
-	fun createUser(email: String, password: String, about: String): User {
-		checkAccountDuplication(email)
-		val userId = generateUuidFor(email)
-		val user = User(userId, email, about)
-		users.add(user)
+	class InMemoryUserCatalog(private val users: ArrayList<User> = arrayListOf()) {
+		fun createUser(email: String, password: String, about: String): User {
+			checkAccountDuplication(email)
+			val userId = generateUuidFor(email)
+			val user = User(userId, email, about)
+			users.add(user)
 
-		return user
-	}
+			return user
+		}
 
-	private fun generateUuidFor(email: String) = ":" + email.takeWhile { it != '@' } + "Id:"
+		private fun generateUuidFor(email: String) = ":" + email.takeWhile { it != '@' } + "Id:"
 
-	private fun checkAccountDuplication(email: String) {
-		if (users.any { it.email == email })
-			throw DuplicateAccountException()
+		private fun checkAccountDuplication(email: String) {
+			if (users.any { it.email == email })
+				throw DuplicateAccountException()
+		}
 	}
 }
 
