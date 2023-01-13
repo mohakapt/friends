@@ -1,6 +1,8 @@
 package com.github.mohaka.friends.signup
 
 import com.github.mohaka.friends.InstantTaskExecuteExtension
+import com.github.mohaka.friends.domain.user.InMemoryUserCatalog
+import com.github.mohaka.friends.domain.user.UserRepository
 import com.github.mohaka.friends.domain.validation.CredentialsValidationResult
 import com.github.mohaka.friends.domain.validation.RegexCredentialsValidator
 import com.github.mohaka.friends.signup.state.SignUpState
@@ -26,7 +28,10 @@ class CredentialsValidationTest {
 		"'       '",
 	)
 	fun invalidEmail(email: String) {
-		val viewModel = SignUpViewModel(RegexCredentialsValidator())
+		val viewModel = SignUpViewModel(
+			RegexCredentialsValidator(),
+			UserRepository(InMemoryUserCatalog())
+		)
 		viewModel.createAccount(email, ":password:", ":about:")
 		assertEquals(SignUpState.BadEmail, viewModel.signUpState.value)
 	}
@@ -41,7 +46,10 @@ class CredentialsValidationTest {
 		"'ABCDEF78#$'",
 	)
 	fun invalidPassword(password: String) {
-		val viewModel = SignUpViewModel(RegexCredentialsValidator())
+		val viewModel = SignUpViewModel(
+			RegexCredentialsValidator(),
+			UserRepository(InMemoryUserCatalog())
+		)
 		viewModel.createAccount("example@domain.com", password, ":about:")
 		assertEquals(SignUpState.BadPassword, viewModel.signUpState.value)
 	}
