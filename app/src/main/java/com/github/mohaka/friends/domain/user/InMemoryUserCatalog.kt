@@ -7,15 +7,17 @@ class InMemoryUserCatalog(private val users: ArrayList<User> = arrayListOf()) {
 		checkAccountDuplication(email)
 		val userId = generateUuidFor(email)
 		val user = User(userId, email, about)
-		users.add(user)
+		saveUser(user)
 
 		return user
 	}
-
-	private fun generateUuidFor(email: String) = ":" + email.takeWhile { it != '@' } + "Id:"
 
 	private fun checkAccountDuplication(email: String) {
 		if (users.any { it.email == email })
 			throw DuplicateAccountException()
 	}
+
+	private fun generateUuidFor(email: String) = ":" + email.takeWhile { it != '@' } + "Id:"
+
+	private fun saveUser(user: User) = users.add(user)
 }
