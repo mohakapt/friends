@@ -30,14 +30,19 @@ class SignUpViewModel(private val credentialsValidator: RegexCredentialsValidato
 	}
 
 	fun createUser(email: String, password: String, about: String): User {
-		if (users.any { it.email == email })
-			throw DuplicateAccountException()
-
-		val userId = ":" + email.takeWhile { it != '@' } + "Id:"
+		checkAccountDuplication(email)
+		val userId = generateUuidFor(email)
 		val user = User(userId, email, about)
 		users.add(user)
 
 		return user
+	}
+
+	private fun generateUuidFor(email: String) = ":" + email.takeWhile { it != '@' } + "Id:"
+
+	private fun checkAccountDuplication(email: String) {
+		if (users.any { it.email == email })
+			throw DuplicateAccountException()
 	}
 }
 
