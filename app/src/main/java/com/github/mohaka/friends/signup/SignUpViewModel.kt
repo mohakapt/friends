@@ -19,15 +19,26 @@ class SignUpViewModel(private val credentialsValidator: RegexCredentialsValidato
 			CredentialsValidationResult.InvalidEmail -> SignUpState.BadEmail
 			CredentialsValidationResult.InvalidPassword -> SignUpState.BadPassword
 			CredentialsValidationResult.Valid -> {
-				if (users.any { it.email == email }) {
-					SignUpState.DuplicateAccount
-				} else {
-					val userId = ":" + email.takeWhile { it != '@' } + "Id:"
-					val user = User(userId, email, about)
-					users.add(user)
+				try {
+					val user = createUser(email, password, about)
 					SignUpState.SignedUp(user)
+				} catch (e: DuplicateAccountException) {
+					SignUpState.DuplicateAccount
 				}
 			}
 		}
 	}
+
+	fun createUser(email: String, password: String, about: String): User {
+		if (users.any { it.email == email })
+			throw DuplicateAccountException()
+
+		val userId = ":" + email.takeWhile { it != '@' } + "Id:"
+		val user = User(userId, email, about)
+		users.add(user)
+
+		return user
+	}
 }
+
+class DuplicateAccountException : Throwable()
