@@ -28,23 +28,23 @@ class SignUpViewModel(private val credentialsValidator: RegexCredentialsValidato
 	} catch (e: DuplicateAccountException) {
 		SignUpState.DuplicateAccount
 	}
+}
 
-	class InMemoryUserCatalog(private val users: ArrayList<User> = arrayListOf()) {
-		fun createUser(email: String, password: String, about: String): User {
-			checkAccountDuplication(email)
-			val userId = generateUuidFor(email)
-			val user = User(userId, email, about)
-			users.add(user)
+class InMemoryUserCatalog(private val users: ArrayList<User> = arrayListOf()) {
+	fun createUser(email: String, password: String, about: String): User {
+		checkAccountDuplication(email)
+		val userId = generateUuidFor(email)
+		val user = User(userId, email, about)
+		users.add(user)
 
-			return user
-		}
+		return user
+	}
 
-		private fun generateUuidFor(email: String) = ":" + email.takeWhile { it != '@' } + "Id:"
+	private fun generateUuidFor(email: String) = ":" + email.takeWhile { it != '@' } + "Id:"
 
-		private fun checkAccountDuplication(email: String) {
-			if (users.any { it.email == email })
-				throw DuplicateAccountException()
-		}
+	private fun checkAccountDuplication(email: String) {
+		if (users.any { it.email == email })
+			throw DuplicateAccountException()
 	}
 }
 
