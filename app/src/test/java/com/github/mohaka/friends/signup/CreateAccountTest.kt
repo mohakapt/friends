@@ -12,13 +12,14 @@ import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(InstantTaskExecuteExtension::class)
 class CreateAccountTest {
+	private val viewModel = SignUpViewModel(
+		RegexCredentialsValidator(),
+		UserRepository(InMemoryUserCatalog())
+	)
+
 	@Test
 	fun accountCreated() {
 		val maya = User(":mayaId:", "maya@friends.com", "about Maya")
-		val viewModel = SignUpViewModel(
-			RegexCredentialsValidator(),
-			UserRepository(InMemoryUserCatalog())
-		)
 		viewModel.createAccount(maya.email, "MaYa@2021", maya.about)
 		assertEquals(SignUpState.SignedUp(maya), viewModel.signUpState.value)
 	}
@@ -26,10 +27,6 @@ class CreateAccountTest {
 	@Test
 	fun anotherAccountCreated() {
 		val bob = User(":bobId:", "bob@friends.com", "about Bob");
-		val viewModel = SignUpViewModel(
-			RegexCredentialsValidator(),
-			UserRepository(InMemoryUserCatalog())
-		)
 		viewModel.createAccount(bob.email, "BoB@2022", bob.about)
 		assertEquals(SignUpState.SignedUp(bob), viewModel.signUpState.value)
 	}
@@ -37,10 +34,7 @@ class CreateAccountTest {
 	@Test
 	fun createDuplicateAccount() {
 		val anna = User(":annaId:", "anna@friens.com", "about Anna")
-		val viewModel = SignUpViewModel(
-			RegexCredentialsValidator(),
-			UserRepository(InMemoryUserCatalog())
-		).also {
+		viewModel.also {
 			it.createAccount(anna.email, "aNnA!2001", anna.about)
 		}
 		viewModel.createAccount(anna.email, "AnNa@2022", anna.about)

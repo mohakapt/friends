@@ -15,6 +15,11 @@ import org.junit.jupiter.params.provider.CsvSource
 @ExtendWith(InstantTaskExecuteExtension::class)
 class CredentialsValidationTest {
 
+	private val viewModel = SignUpViewModel(
+		RegexCredentialsValidator(),
+		UserRepository(InMemoryUserCatalog())
+	)
+
 	@ParameterizedTest
 	@CsvSource(
 		"'email'",
@@ -28,10 +33,6 @@ class CredentialsValidationTest {
 		"'       '",
 	)
 	fun invalidEmail(email: String) {
-		val viewModel = SignUpViewModel(
-			RegexCredentialsValidator(),
-			UserRepository(InMemoryUserCatalog())
-		)
 		viewModel.createAccount(email, ":password:", ":about:")
 		assertEquals(SignUpState.BadEmail, viewModel.signUpState.value)
 	}
@@ -46,10 +47,6 @@ class CredentialsValidationTest {
 		"'ABCDEF78#$'",
 	)
 	fun invalidPassword(password: String) {
-		val viewModel = SignUpViewModel(
-			RegexCredentialsValidator(),
-			UserRepository(InMemoryUserCatalog())
-		)
 		viewModel.createAccount("example@domain.com", password, ":about:")
 		assertEquals(SignUpState.BadPassword, viewModel.signUpState.value)
 	}
