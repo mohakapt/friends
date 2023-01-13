@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -14,10 +15,26 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.mohaka.friends.R
+import com.github.mohaka.friends.domain.user.InMemoryUserCatalog
+import com.github.mohaka.friends.domain.user.UserRepository
+import com.github.mohaka.friends.domain.validation.RegexCredentialsValidator
+import com.github.mohaka.friends.signup.state.SignUpState
 
 @Composable
 @Preview(device = Devices.PIXEL_4)
-fun SignUpScreen() {
+fun SignUpScreen(onSignedUp: () -> Unit) {
+	val credentialsValidator = RegexCredentialsValidator()
+	val userRepository = UserRepository(InMemoryUserCatalog())
+	val viewModel = SignUpViewModel(credentialsValidator, userRepository)
+
+	var email by remember { mutableStateOf("") }
+	var password by remember { mutableStateOf("") }
+	val signUpState by viewModel.signUpState.observeAsState()
+
+	if (signUpState is SignUpState.SignedUp) {
+		onSignedUp()
+	}
+
 	Column(
 		modifier = Modifier
 			.fillMaxSize()
@@ -26,9 +43,6 @@ fun SignUpScreen() {
 		ScreenTitle(R.string.text_createAccount)
 
 		Spacer(modifier = Modifier.height(16.dp))
-
-		var email by remember { mutableStateOf("") }
-		var password by remember { mutableStateOf("") }
 
 		EmailField(
 			value = email,
@@ -44,7 +58,7 @@ fun SignUpScreen() {
 
 		Button(
 			modifier = Modifier.fillMaxWidth(),
-			onClick = { },
+			onClick = { viewModel.createAccount(email, password, "") },
 			content = { Text(text = stringResource(id = R.string.action_signUp)) }
 		)
 	}
