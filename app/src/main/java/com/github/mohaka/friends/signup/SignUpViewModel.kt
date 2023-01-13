@@ -18,15 +18,15 @@ class SignUpViewModel(private val credentialsValidator: RegexCredentialsValidato
 		_mutableSignUpState.value = when (result) {
 			CredentialsValidationResult.InvalidEmail -> SignUpState.BadEmail
 			CredentialsValidationResult.InvalidPassword -> SignUpState.BadPassword
-			CredentialsValidationResult.Valid -> {
-				try {
-					val user = createUser(email, password, about)
-					SignUpState.SignedUp(user)
-				} catch (e: DuplicateAccountException) {
-					SignUpState.DuplicateAccount
-				}
-			}
+			CredentialsValidationResult.Valid -> signUp(email, password, about)
 		}
+	}
+
+	private fun signUp(email: String, password: String, about: String) = try {
+		val user = createUser(email, password, about)
+		SignUpState.SignedUp(user)
+	} catch (e: DuplicateAccountException) {
+		SignUpState.DuplicateAccount
 	}
 
 	fun createUser(email: String, password: String, about: String): User {
