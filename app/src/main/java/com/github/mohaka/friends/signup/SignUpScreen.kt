@@ -29,9 +29,11 @@ fun SignUpScreen(onSignedUp: () -> Unit) {
 
 	var email by remember { mutableStateOf("") }
 	var password by remember { mutableStateOf("") }
+	var reportedSignedUp by remember { mutableStateOf(false) }
 	val signUpState by viewModel.signUpState.observeAsState()
 
-	if (signUpState is SignUpState.SignedUp) {
+	if (signUpState is SignUpState.SignedUp && !reportedSignedUp) {
+		reportedSignedUp = true
 		onSignedUp()
 	}
 
