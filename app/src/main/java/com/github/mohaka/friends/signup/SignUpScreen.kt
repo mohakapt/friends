@@ -29,6 +29,7 @@ fun SignUpScreen(onSignedUp: () -> Unit) {
 
 	var email by remember { mutableStateOf("") }
 	var password by remember { mutableStateOf("") }
+	var about by remember { mutableStateOf("") }
 	var reportedSignedUp by remember { mutableStateOf(false) }
 	val signUpState by viewModel.signUpState.observeAsState()
 
@@ -54,6 +55,11 @@ fun SignUpScreen(onSignedUp: () -> Unit) {
 		PasswordField(
 			value = password,
 			onValueChange = { password = it }
+		)
+
+		AboutField(
+			value = about,
+			onValueChange = { about = it }
 		)
 
 		Spacer(modifier = Modifier.height(16.dp))
@@ -118,4 +124,14 @@ private fun VisibilityToggle(value: Boolean, onToggle: () -> Unit) {
 			contentDescription = stringResource(id = R.string.action_toggleVisibility)
 		)
 	}
+}
+
+@Composable
+private fun AboutField(value: String, onValueChange: (String) -> Unit) {
+	OutlinedTextField(
+		modifier = Modifier.fillMaxWidth(),
+		value = value,
+		label = { Text(text = stringResource(id = R.string.hint_about)) },
+		onValueChange = onValueChange
+	)
 }

@@ -1,6 +1,7 @@
 <resources>
 	<string name="app_name">Friends</string>
 	<string name="hint_email">Email</string>
+	<string name="hint_about">About</string>
 	<string name="hint_password">Password</string>
 	<string name="action_signUp">Sign Up</string>
 	<string name="title_timeline">Timeline</string>
