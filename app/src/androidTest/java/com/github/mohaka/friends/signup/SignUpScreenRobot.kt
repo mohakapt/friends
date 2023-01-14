@@ -41,4 +41,10 @@ class SignUpVerification(private val rule: ComposeRule<MainActivity>) {
 		rule.onNodeWithText(timeline)
 			.assertIsDisplayed()
 	}
+
+	fun duplicateAccountErrorIsPresent() {
+		val duplicateAccountError = rule.activity.getString(R.string.error_duplicateAccount)
+		rule.onNodeWithText(duplicateAccountError)
+			.assertIsDisplayed()
+	}
 }
