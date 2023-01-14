@@ -15,18 +15,14 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.mohaka.friends.R
-import com.github.mohaka.friends.domain.user.InMemoryUserCatalog
-import com.github.mohaka.friends.domain.user.UserRepository
-import com.github.mohaka.friends.domain.validation.RegexCredentialsValidator
 import com.github.mohaka.friends.signup.state.SignUpState
 
 @Composable
 @Preview(device = Devices.PIXEL_4)
-fun SignUpScreen(onSignedUp: () -> Unit) {
-	val credentialsValidator = RegexCredentialsValidator()
-	val userRepository = UserRepository(InMemoryUserCatalog())
-	val viewModel = SignUpViewModel(credentialsValidator, userRepository)
-
+fun SignUpScreen(
+	viewModel: SignUpViewModel,
+	onSignedUp: () -> Unit
+) {
 	var email by remember { mutableStateOf("") }
 	var password by remember { mutableStateOf("") }
 	var about by remember { mutableStateOf("") }
