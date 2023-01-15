@@ -8,4 +8,5 @@ sealed class SignUpState {
 	object BadEmail : SignUpState()
 	object BadPassword : SignUpState()
 	object DuplicateAccount : SignUpState()
+	object BackendError: SignUpState()
 }
