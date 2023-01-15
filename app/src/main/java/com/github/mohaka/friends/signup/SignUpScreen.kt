@@ -54,6 +54,7 @@ fun SignUpScreen(
 
 			PasswordField(
 				value = password,
+				isError = signUpState is SignUpState.BadPassword,
 				onValueChange = { password = it }
 			)
 
@@ -128,13 +129,18 @@ private fun EmailField(
 }
 
 @Composable
-private fun PasswordField(value: String, onValueChange: (String) -> Unit) {
+private fun PasswordField(
+	value: String,
+	isError: Boolean,
+	onValueChange: (String) -> Unit
+) {
 	var isPasswordVisible by remember { mutableStateOf(false) }
 	val visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation()
 
 	OutlinedTextField(
 		modifier = Modifier.fillMaxWidth(),
 		value = value,
+		isError = isError,
 		trailingIcon = {
 			VisibilityToggle(isPasswordVisible) {
 				isPasswordVisible = !isPasswordVisible
@@ -144,6 +150,14 @@ private fun PasswordField(value: String, onValueChange: (String) -> Unit) {
 		label = { Text(text = stringResource(id = R.string.hint_password)) },
 		onValueChange = onValueChange
 	)
+	if (isError) {
+		Text(
+			text = stringResource(R.string.error_invalidPassword),
+			color = colors.error,
+			style = typography.caption,
+			modifier = Modifier.padding(start = 16.dp)
+		)
+	}
 }
 
 @Composable
