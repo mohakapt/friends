@@ -68,7 +68,7 @@ fun SignUpScreen(
 			Button(
 				modifier = Modifier.fillMaxWidth(),
 				onClick = { viewModel.createAccount(email, password, "") },
-				content = { Text(text = stringResource(id = R.string.action_signUp)) }
+				content = { Text(text = stringResource(R.string.action_signUp)) }
 			)
 		}
 
@@ -147,7 +147,7 @@ private fun PasswordField(
 			}
 		},
 		visualTransformation = visualTransformation,
-		label = { Text(text = stringResource(id = R.string.hint_password)) },
+		label = { Text(text = stringResource(R.string.hint_password)) },
 		onValueChange = onValueChange
 	)
 	if (isError) {
@@ -166,8 +166,8 @@ private fun VisibilityToggle(value: Boolean, onToggle: () -> Unit) {
 
 	IconButton(onClick = onToggle) {
 		Icon(
-			painter = painterResource(id = painterId),
-			contentDescription = stringResource(id = R.string.action_toggleVisibility)
+			painter = painterResource(painterId),
+			contentDescription = stringResource(R.string.action_toggleVisibility)
 		)
 	}
 }
@@ -177,7 +177,7 @@ private fun AboutField(value: String, onValueChange: (String) -> Unit) {
 	OutlinedTextField(
 		modifier = Modifier.fillMaxWidth(),
 		value = value,
-		label = { Text(text = stringResource(id = R.string.hint_about)) },
+		label = { Text(text = stringResource(R.string.hint_about)) },
 		onValueChange = onValueChange
 	)
 }
