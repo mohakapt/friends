@@ -19,12 +19,9 @@ class SignUpScreenTest {
 	@get:Rule
 	val signUpTestRule = createAndroidComposeRule<MainActivity>()
 
-	private val userCatalog = InMemoryUserCatalog()
-	private val signUpModule = module { factory<UserCatalog> { userCatalog } }
-
 	@Before
 	fun setup() {
-		loadKoinModules(signUpModule)
+		replaceUserCatalogWith(InMemoryUserCatalog())
 	}
 
 	@Test
@@ -64,7 +61,10 @@ class SignUpScreenTest {
 	fun displayDuplicateAccountError() {
 		val signedUpEmail = "alice@friends.com"
 		val signedUpPassword = "P@ssw0rd*"
-		createUserWith(signedUpEmail, signedUpPassword)
+
+		replaceUserCatalogWith(InMemoryUserCatalog().apply {
+			createUser(signedUpEmail, signedUpPassword, ":about:")
+		})
 
 		launchSignUpScreen(signUpTestRule) {
 			typeEmail(signedUpEmail)
@@ -103,8 +103,7 @@ class SignUpScreenTest {
 
 	@After
 	fun tearDown() {
-		val resetModule = module { single<UserCatalog> { InMemoryUserCatalog() } }
-		loadKoinModules(resetModule)
+		replaceUserCatalogWith(InMemoryUserCatalog())
 	}
 
 	class UnavailableUserCatalog : UserCatalog {
@@ -122,9 +121,5 @@ class SignUpScreenTest {
 	private fun replaceUserCatalogWith(userCatalog: UserCatalog) {
 		val replaceModule = module { factory { userCatalog } }
 		loadKoinModules(replaceModule)
-	}
-
-	private fun createUserWith(signedUpEmail: String, signedUpPassword: String) {
-		userCatalog.createUser(signedUpEmail, signedUpPassword, ":about:")
 	}
 }
