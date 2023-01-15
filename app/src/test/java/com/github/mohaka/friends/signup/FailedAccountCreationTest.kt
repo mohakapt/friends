@@ -1,6 +1,7 @@
 package com.github.mohaka.friends.signup
 
 import com.github.mohaka.friends.domain.exceptions.BackendException
+import com.github.mohaka.friends.domain.exceptions.NetworkException
 import com.github.mohaka.friends.domain.user.User
 import com.github.mohaka.friends.domain.user.UserCatalog
 import com.github.mohaka.friends.domain.user.UserRepository
@@ -17,9 +18,22 @@ class FailedAccountCreationTest {
 		assertEquals(SignUpState.BackendError, result)
 	}
 
+	@Test
+	fun offlineError() {
+		val userRepository = UserRepository(OfflineUserCatalog())
+		val result = userRepository.signUp(":email:", ":password:", ":about:")
+		assertEquals(SignUpState.Offline, result)
+	}
+
 	class UnavailableUserCatalog : UserCatalog {
 		override fun createUser(email: String, password: String, about: String): User {
 			throw BackendException()
+		}
+	}
+
+	class OfflineUserCatalog : UserCatalog {
+		override fun createUser(email: String, password: String, about: String): User {
+			throw NetworkException()
 		}
 	}
 }
