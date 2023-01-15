@@ -1,7 +1,6 @@
 package com.github.mohaka.friends.signup
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.colors
@@ -84,11 +83,20 @@ fun SignUpScreen(
 @Composable
 fun InfoMessage(@StringRes messageResId: Int) {
 	Surface(
-		modifier = Modifier
-			.fillMaxWidth()
-			.background(colors.secondaryVariant)
+		modifier = Modifier.fillMaxWidth(),
+		color = colors.error,
+		elevation = 4.dp,
 	) {
-		Text(text = stringResource(messageResId))
+		Row(
+			modifier = Modifier.fillMaxWidth(),
+			horizontalArrangement = Arrangement.Center,
+		) {
+			Text(
+				modifier = Modifier.padding(16.dp),
+				text = stringResource(messageResId),
+				color = colors.onError,
+			)
+		}
 	}
 }
 
