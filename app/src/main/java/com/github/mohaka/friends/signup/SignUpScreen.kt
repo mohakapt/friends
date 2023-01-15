@@ -1,6 +1,7 @@
 package com.github.mohaka.friends.signup
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.typography
@@ -34,37 +35,54 @@ fun SignUpScreen(
 		onSignedUp()
 	}
 
-	Column(
+	Box(modifier = Modifier.fillMaxSize()) {
+		Column(
+			modifier = Modifier
+				.fillMaxSize()
+				.padding(16.dp)
+		) {
+			ScreenTitle(R.string.text_createAccount)
+
+			Spacer(modifier = Modifier.height(16.dp))
+
+			EmailField(
+				value = email,
+				onValueChange = { email = it }
+			)
+
+			PasswordField(
+				value = password,
+				onValueChange = { password = it }
+			)
+
+			AboutField(
+				value = about,
+				onValueChange = { about = it }
+			)
+
+			Spacer(modifier = Modifier.height(16.dp))
+
+			Button(
+				modifier = Modifier.fillMaxWidth(),
+				onClick = { viewModel.createAccount(email, password, "") },
+				content = { Text(text = stringResource(id = R.string.action_signUp)) }
+			)
+		}
+
+		if (signUpState is SignUpState.DuplicateAccount) {
+			InfoMessage(R.string.error_duplicateAccount)
+		}
+	}
+}
+
+@Composable
+fun InfoMessage(@StringRes messageResId: Int) {
+	Surface(
 		modifier = Modifier
-			.fillMaxSize()
-			.padding(16.dp)
+			.fillMaxWidth()
+			.background(MaterialTheme.colors.secondaryVariant)
 	) {
-		ScreenTitle(R.string.text_createAccount)
-
-		Spacer(modifier = Modifier.height(16.dp))
-
-		EmailField(
-			value = email,
-			onValueChange = { email = it }
-		)
-
-		PasswordField(
-			value = password,
-			onValueChange = { password = it }
-		)
-
-		AboutField(
-			value = about,
-			onValueChange = { about = it }
-		)
-
-		Spacer(modifier = Modifier.height(16.dp))
-
-		Button(
-			modifier = Modifier.fillMaxWidth(),
-			onClick = { viewModel.createAccount(email, password, "") },
-			content = { Text(text = stringResource(id = R.string.action_signUp)) }
-		)
+		Text(text = stringResource(messageResId))
 	}
 }
 

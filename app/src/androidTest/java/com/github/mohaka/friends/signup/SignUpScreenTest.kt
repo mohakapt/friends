@@ -3,6 +3,7 @@ package com.github.mohaka.friends.signup
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.github.mohaka.friends.MainActivity
 import com.github.mohaka.friends.domain.user.InMemoryUserCatalog
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -15,13 +16,17 @@ class SignUpScreenTest {
 	val signUpTestRule = createAndroidComposeRule<MainActivity>()
 
 	private val userCatalog = InMemoryUserCatalog()
-	private val signUpModule = module {
-		factory { userCatalog }
-	}
+	private val signUpModule = module { factory { userCatalog } }
 
 	@Before
 	fun setup() {
 		loadKoinModules(signUpModule)
+	}
+
+	@After
+	fun tearDown() {
+		val resetModule = module { single { InMemoryUserCatalog() } }
+		loadKoinModules(resetModule)
 	}
 
 	@Test
