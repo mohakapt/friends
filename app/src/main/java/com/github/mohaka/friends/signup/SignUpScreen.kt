@@ -70,6 +70,7 @@ fun SignUpScreen(
 		}
 
 		when (signUpState) {
+			is SignUpState.BadEmail -> InfoMessage(R.string.error_invalidEmail)
 			is SignUpState.DuplicateAccount -> InfoMessage(R.string.error_duplicateAccount)
 			is SignUpState.BackendError -> InfoMessage(R.string.error_backendError)
 			is SignUpState.OfflineError -> InfoMessage(R.string.error_noConnection)

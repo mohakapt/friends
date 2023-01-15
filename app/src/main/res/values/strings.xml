@@ -10,4 +10,5 @@
 	<string name="error_duplicateAccount">An account with this email already exists.</string>
 	<string name="error_backendError">Unable to create an account, Please try again later.</string>
 	<string name="error_noConnection">No internet connection.</string>
+	<string name="error_invalidEmail">The email you entered is invalid.</string>
 </resources>

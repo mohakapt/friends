@@ -31,10 +31,21 @@ class SignUpScreenTest {
 	fun performSignUp() {
 		launchSignUpScreen(signUpTestRule) {
 			typeEmail("mohakapt@gmail.com")
-			typePassword("P@sSw0rd123**")
+			typePassword("P@ssw0rd*")
 			submit()
 		} verify {
 			timelineScreenIsPresent()
+		}
+	}
+
+	@Test
+	fun displayBadEmailError() {
+		launchSignUpScreen(signUpTestRule) {
+			typeEmail("badEmail")
+			typePassword("P@ssw0rd*")
+			submit()
+		} verify {
+			badEmailErrorIsPresent()
 		}
 	}
 

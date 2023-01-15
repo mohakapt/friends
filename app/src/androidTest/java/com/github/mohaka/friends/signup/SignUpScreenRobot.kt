@@ -59,4 +59,10 @@ class SignUpVerification(private val rule: ComposeRule<MainActivity>) {
 		rule.onNodeWithText(offlineError)
 			.assertIsDisplayed()
 	}
+
+	fun badEmailErrorIsPresent() {
+		val badEmail = rule.activity.getString(R.string.error_invalidEmail)
+		rule.onNodeWithText(badEmail)
+			.assertIsDisplayed()
+	}
 }
