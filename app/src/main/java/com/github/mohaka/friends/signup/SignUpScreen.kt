@@ -69,10 +69,11 @@ fun SignUpScreen(
 			)
 		}
 
-		if (signUpState is SignUpState.DuplicateAccount) {
-			InfoMessage(R.string.error_duplicateAccount)
-		} else if (signUpState is SignUpState.BackendError) {
-			InfoMessage(R.string.error_backendError)
+		when (signUpState) {
+			is SignUpState.DuplicateAccount -> InfoMessage(R.string.error_duplicateAccount)
+			is SignUpState.BackendError -> InfoMessage(R.string.error_backendError)
+			is SignUpState.OfflineError -> InfoMessage(R.string.error_noConnection)
+			else -> {}
 		}
 	}
 }

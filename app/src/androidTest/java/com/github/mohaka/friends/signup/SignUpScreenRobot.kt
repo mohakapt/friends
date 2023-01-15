@@ -53,4 +53,10 @@ class SignUpVerification(private val rule: ComposeRule<MainActivity>) {
 		rule.onNodeWithText(backendError)
 			.assertIsDisplayed()
 	}
+
+	fun offlineErrorIsPresent() {
+		val offlineError = rule.activity.getString(R.string.error_noConnection)
+		rule.onNodeWithText(offlineError)
+			.assertIsDisplayed()
+	}
 }

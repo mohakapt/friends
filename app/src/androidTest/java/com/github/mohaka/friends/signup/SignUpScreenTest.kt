@@ -3,6 +3,7 @@ package com.github.mohaka.friends.signup
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.github.mohaka.friends.MainActivity
 import com.github.mohaka.friends.domain.exceptions.BackendException
+import com.github.mohaka.friends.domain.exceptions.NetworkException
 import com.github.mohaka.friends.domain.user.InMemoryUserCatalog
 import com.github.mohaka.friends.domain.user.User
 import com.github.mohaka.friends.domain.user.UserCatalog
@@ -24,12 +25,6 @@ class SignUpScreenTest {
 	@Before
 	fun setup() {
 		loadKoinModules(signUpModule)
-	}
-
-	@After
-	fun tearDown() {
-		val resetModule = module { single<UserCatalog> { InMemoryUserCatalog() } }
-		loadKoinModules(resetModule)
 	}
 
 	@Test
@@ -72,11 +67,36 @@ class SignUpScreenTest {
 		}
 	}
 
+	@Test
+	fun displayOfflineError() {
+		val replaceModule = module { factory<UserCatalog> { OfflineUserCatalog() } }
+		loadKoinModules(replaceModule)
+
+		launchSignUpScreen(signUpTestRule) {
+			typeEmail("joe@friends.com")
+			typePassword("P@ssw0rd*")
+			submit()
+		} verify {
+			offlineErrorIsPresent()
+		}
+	}
+
+	@After
+	fun tearDown() {
+		val resetModule = module { single<UserCatalog> { InMemoryUserCatalog() } }
+		loadKoinModules(resetModule)
+	}
+
 	class UnavailableUserCatalog : UserCatalog {
 		override fun createUser(email: String, password: String, about: String): User {
 			throw BackendException()
 		}
+	}
 
+	class OfflineUserCatalog : UserCatalog {
+		override fun createUser(email: String, password: String, about: String): User {
+			throw NetworkException()
+		}
 	}
 
 	private fun createUserWith(signedUpEmail: String, signedUpPassword: String) {

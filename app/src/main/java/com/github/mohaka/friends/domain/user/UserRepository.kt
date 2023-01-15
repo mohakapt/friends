@@ -14,6 +14,6 @@ class UserRepository(private val userCatalog: UserCatalog) {
 	} catch (e: BackendException) {
 		SignUpState.BackendError
 	} catch (e: NetworkException) {
-		SignUpState.Offline
+		SignUpState.OfflineError
 	}
 }

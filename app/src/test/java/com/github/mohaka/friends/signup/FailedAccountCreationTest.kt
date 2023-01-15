@@ -22,7 +22,7 @@ class FailedAccountCreationTest {
 	fun offlineError() {
 		val userRepository = UserRepository(OfflineUserCatalog())
 		val result = userRepository.signUp(":email:", ":password:", ":about:")
-		assertEquals(SignUpState.Offline, result)
+		assertEquals(SignUpState.OfflineError, result)
 	}
 
 	class UnavailableUserCatalog : UserCatalog {
