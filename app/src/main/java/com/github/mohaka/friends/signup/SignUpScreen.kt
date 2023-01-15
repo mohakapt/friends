@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -47,6 +48,7 @@ fun SignUpScreen(
 
 			EmailField(
 				value = email,
+				isError = signUpState is SignUpState.BadEmail,
 				onValueChange = { email = it }
 			)
 
@@ -70,7 +72,6 @@ fun SignUpScreen(
 		}
 
 		when (signUpState) {
-			is SignUpState.BadEmail -> InfoMessage(R.string.error_invalidEmail)
 			is SignUpState.DuplicateAccount -> InfoMessage(R.string.error_duplicateAccount)
 			is SignUpState.BackendError -> InfoMessage(R.string.error_backendError)
 			is SignUpState.OfflineError -> InfoMessage(R.string.error_noConnection)
@@ -84,7 +85,7 @@ fun InfoMessage(@StringRes messageResId: Int) {
 	Surface(
 		modifier = Modifier
 			.fillMaxWidth()
-			.background(MaterialTheme.colors.secondaryVariant)
+			.background(colors.secondaryVariant)
 	) {
 		Text(text = stringResource(messageResId))
 	}
@@ -104,13 +105,26 @@ private fun ScreenTitle(@StringRes id: Int) {
 }
 
 @Composable
-private fun EmailField(value: String, onValueChange: (String) -> Unit) {
+private fun EmailField(
+	value: String,
+	isError: Boolean,
+	onValueChange: (String) -> Unit,
+) {
 	OutlinedTextField(
 		modifier = Modifier.fillMaxWidth(),
 		value = value,
-		label = { Text(text = stringResource(id = R.string.hint_email)) },
+		isError = isError,
+		label = { Text(text = stringResource(R.string.hint_email)) },
 		onValueChange = onValueChange
 	)
+	if (isError) {
+		Text(
+			text = stringResource(R.string.error_invalidEmail),
+			color = colors.error,
+			style = typography.caption,
+			modifier = Modifier.padding(start = 16.dp)
+		)
+	}
 }
 
 @Composable
