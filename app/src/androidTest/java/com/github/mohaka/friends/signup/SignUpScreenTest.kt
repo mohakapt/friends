@@ -2,7 +2,9 @@ package com.github.mohaka.friends.signup
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.github.mohaka.friends.MainActivity
+import com.github.mohaka.friends.domain.exceptions.BackendException
 import com.github.mohaka.friends.domain.user.InMemoryUserCatalog
+import com.github.mohaka.friends.domain.user.User
 import com.github.mohaka.friends.domain.user.UserCatalog
 import org.junit.After
 import org.junit.Before
@@ -54,6 +56,27 @@ class SignUpScreenTest {
 		} verify {
 			duplicateAccountErrorIsPresent()
 		}
+	}
+
+	@Test
+	fun displayBackendError() {
+		val replaceModule = module { factory<UserCatalog> { UnavailableUserCatalog() } }
+		loadKoinModules(replaceModule)
+
+		launchSignUpScreen(signUpTestRule) {
+			typeEmail("mike@friends.com")
+			typePassword("P@ssw0rd*")
+			submit()
+		} verify {
+			backendErrorIsPresent()
+		}
+	}
+
+	class UnavailableUserCatalog : UserCatalog {
+		override fun createUser(email: String, password: String, about: String): User {
+			throw BackendException()
+		}
+
 	}
 
 	private fun createUserWith(signedUpEmail: String, signedUpPassword: String) {

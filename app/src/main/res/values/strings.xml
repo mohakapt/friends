@@ -8,4 +8,5 @@
 	<string name="text_createAccount">Create an account</string>
 	<string name="action_toggleVisibility">Toggle Visibility</string>
 	<string name="error_duplicateAccount">An account with this email already exists.</string>
+	<string name="error_backendError">Unable to create an account, Please try again later.</string>
 </resources>
