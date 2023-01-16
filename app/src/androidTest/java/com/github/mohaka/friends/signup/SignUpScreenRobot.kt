@@ -1,10 +1,7 @@
 package com.github.mohaka.friends.signup
 
-import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.github.mohaka.friends.MainActivity
 import com.github.mohaka.friends.R
@@ -70,5 +67,17 @@ class SignUpVerification(private val rule: ComposeRule<MainActivity>) {
 		val badPassword = rule.activity.getString(R.string.error_invalidPassword)
 		rule.onNodeWithText(badPassword)
 			.assertIsDisplayed()
+	}
+
+	fun badEmailErrorIsNotPresent() {
+		val badEmail = rule.activity.getString(R.string.error_invalidEmail)
+		rule.onNodeWithText(badEmail)
+			.assertDoesNotExist()
+	}
+
+	fun badPasswordErrorIsNotPresent() {
+		val badPassword = rule.activity.getString(R.string.error_invalidPassword)
+		rule.onNodeWithText(badPassword)
+			.assertDoesNotExist()
 	}
 }

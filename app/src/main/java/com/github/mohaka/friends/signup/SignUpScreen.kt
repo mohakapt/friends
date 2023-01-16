@@ -56,11 +56,22 @@ fun SignUpScreen(
 
 			Spacer(modifier = Modifier.height(16.dp))
 
-			EmailField(value = screenState.email, isError = screenState.isEmailErrorVisible, onValueChange = { screenState.email = it })
+			EmailField(
+				value = screenState.email,
+				isError = screenState.showBadEmail,
+				onValueChange = { screenState.email = it }
+			)
 
-			PasswordField(value = screenState.password, isError = screenState.isPasswordErrorVisible, onValueChange = { screenState.password = it })
+			PasswordField(
+				value = screenState.password,
+				isError = screenState.showBadPassword,
+				onValueChange = { screenState.password = it }
+			)
 
-			AboutField(value = screenState.about, onValueChange = { screenState.about = it })
+			AboutField(
+				value = screenState.about,
+				onValueChange = { screenState.about = it }
+			)
 
 			Spacer(modifier = Modifier.height(16.dp))
 
@@ -85,7 +96,8 @@ fun InfoMessage(
 ) {
 	AnimatedVisibility(visible = isVisible, enter = slideInVertically(
 		initialOffsetY = { fullHeight -> -fullHeight }, animationSpec = tween(durationMillis = 200, easing = FastOutSlowInEasing)
-	), exit = slideOutVertically(animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing), targetOffsetY = { fullHeight -> -fullHeight })) {
+	), exit = slideOutVertically(animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing), targetOffsetY = { fullHeight -> -fullHeight })
+	) {
 		Surface(
 			modifier = Modifier.fillMaxWidth(),
 			color = colors.error,

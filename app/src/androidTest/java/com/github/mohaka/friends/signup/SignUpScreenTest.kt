@@ -39,7 +39,6 @@ class SignUpScreenTest {
 	fun displayBadEmailError() {
 		launchSignUpScreen(signUpTestRule) {
 			typeEmail("badEmail")
-			typePassword("P@ssw0rd*")
 			submit()
 		} verify {
 			badEmailErrorIsPresent()
@@ -98,6 +97,29 @@ class SignUpScreenTest {
 			submit()
 		} verify {
 			offlineErrorIsPresent()
+		}
+	}
+
+	@Test
+	fun resetBadEmailError() {
+		launchSignUpScreen(signUpTestRule) {
+			typeEmail("badEmail")
+			submit()
+			typeEmail("heysem@friends.com")
+		} verify {
+			badEmailErrorIsNotPresent()
+		}
+	}
+
+	@Test
+	fun resetBadPasswordError() {
+		launchSignUpScreen(signUpTestRule) {
+			typeEmail("heysem@friends.com")
+			typePassword("123456")
+			submit()
+			typePassword("123456A")
+		} verify {
+			badPasswordErrorIsNotPresent()
 		}
 	}
 
