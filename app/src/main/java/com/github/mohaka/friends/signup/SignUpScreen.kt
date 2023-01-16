@@ -37,6 +37,9 @@ fun SignUpScreen(
 	var reportedSignedUp by remember { mutableStateOf(false) }
 	val signUpState by viewModel.signUpState.observeAsState()
 
+	var isEmailErrorVisible by remember { mutableStateOf(false) }
+	var isPasswordErrorVisible by remember { mutableStateOf(false) }
+
 	var isErrorVisible by remember { mutableStateOf(false) }
 	var errorMessage by remember { mutableStateOf(0) }
 
@@ -51,6 +54,11 @@ fun SignUpScreen(
 		isErrorVisible = false
 	}
 
+	fun resetUiState() {
+		isErrorVisible = false
+		errorMessage = 0
+	}
+
 	when (signUpState) {
 		is SignUpState.SignedUp -> {
 			if (!reportedSignedUp) {
@@ -58,6 +66,8 @@ fun SignUpScreen(
 				onSignedUp()
 			}
 		}
+		is SignUpState.BadEmail -> isEmailErrorVisible = true
+		is SignUpState.BadPassword -> isPasswordErrorVisible = true
 		is SignUpState.DuplicateAccount -> showErrorMessage(R.string.error_duplicateAccount)
 		is SignUpState.BackendError -> showErrorMessage(R.string.error_backendError)
 		is SignUpState.OfflineError -> showErrorMessage(R.string.error_noConnection)
@@ -76,13 +86,13 @@ fun SignUpScreen(
 
 			EmailField(
 				value = email,
-				isError = signUpState is SignUpState.BadEmail,
+				isError = isEmailErrorVisible,
 				onValueChange = { email = it }
 			)
 
 			PasswordField(
 				value = password,
-				isError = signUpState is SignUpState.BadPassword,
+				isError = isPasswordErrorVisible,
 				onValueChange = { password = it }
 			)
 
@@ -95,7 +105,10 @@ fun SignUpScreen(
 
 			Button(
 				modifier = Modifier.fillMaxWidth(),
-				onClick = { viewModel.createAccount(email, password, "") },
+				onClick = {
+					resetUiState()
+					viewModel.createAccount(email, password, "")
+				},
 				content = { Text(text = stringResource(R.string.action_signUp)) }
 			)
 		}
