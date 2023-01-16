@@ -1,6 +1,11 @@
 package com.github.mohaka.friends.signup
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.colors
@@ -17,6 +22,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.mohaka.friends.R
 import com.github.mohaka.friends.signup.state.SignUpState
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 @Preview(device = Devices.PIXEL_4)
@@ -30,9 +37,31 @@ fun SignUpScreen(
 	var reportedSignedUp by remember { mutableStateOf(false) }
 	val signUpState by viewModel.signUpState.observeAsState()
 
-	if (signUpState is SignUpState.SignedUp && !reportedSignedUp) {
-		reportedSignedUp = true
-		onSignedUp()
+	var isErrorVisible by remember { mutableStateOf(false) }
+	var errorMessage by remember { mutableStateOf(0) }
+
+	val coroutineScope = rememberCoroutineScope()
+
+	fun showErrorMessage(messageResId: Int) = coroutineScope.launch {
+		if (errorMessage == messageResId) return@launch
+
+		errorMessage = messageResId
+		isErrorVisible = true
+		delay(1500)
+		isErrorVisible = false
+	}
+
+	when (signUpState) {
+		is SignUpState.SignedUp -> {
+			if (!reportedSignedUp) {
+				reportedSignedUp = true
+				onSignedUp()
+			}
+		}
+		is SignUpState.DuplicateAccount -> showErrorMessage(R.string.error_duplicateAccount)
+		is SignUpState.BackendError -> showErrorMessage(R.string.error_backendError)
+		is SignUpState.OfflineError -> showErrorMessage(R.string.error_noConnection)
+		else -> {}
 	}
 
 	Box(modifier = Modifier.fillMaxSize()) {
@@ -71,31 +100,44 @@ fun SignUpScreen(
 			)
 		}
 
-		when (signUpState) {
-			is SignUpState.DuplicateAccount -> InfoMessage(R.string.error_duplicateAccount)
-			is SignUpState.BackendError -> InfoMessage(R.string.error_backendError)
-			is SignUpState.OfflineError -> InfoMessage(R.string.error_noConnection)
-			else -> {}
-		}
+		InfoMessage(
+			isVisible = isErrorVisible,
+			messageResId = errorMessage
+		)
 	}
 }
 
 @Composable
-fun InfoMessage(@StringRes messageResId: Int) {
-	Surface(
-		modifier = Modifier.fillMaxWidth(),
-		color = colors.error,
-		elevation = 4.dp,
+fun InfoMessage(
+	isVisible: Boolean,
+	@StringRes messageResId: Int,
+) {
+	AnimatedVisibility(
+		visible = isVisible,
+		enter = slideInVertically(
+			initialOffsetY = { fullHeight -> -fullHeight },
+			animationSpec = tween(durationMillis = 200, easing = FastOutSlowInEasing)
+		),
+		exit = slideOutVertically(
+			animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing),
+			targetOffsetY = { fullHeight -> -fullHeight }
+		)
 	) {
-		Row(
+		Surface(
 			modifier = Modifier.fillMaxWidth(),
-			horizontalArrangement = Arrangement.Center,
+			color = colors.error,
+			elevation = 4.dp,
 		) {
-			Text(
-				modifier = Modifier.padding(16.dp),
-				text = stringResource(messageResId),
-				color = colors.onError,
-			)
+			Row(
+				modifier = Modifier.fillMaxWidth(),
+				horizontalArrangement = Arrangement.Center,
+			) {
+				Text(
+					modifier = Modifier.padding(16.dp),
+					text = stringResource(messageResId),
+					color = colors.onError,
+				)
+			}
 		}
 	}
 }
