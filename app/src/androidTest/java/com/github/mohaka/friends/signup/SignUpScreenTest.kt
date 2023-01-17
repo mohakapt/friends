@@ -7,6 +7,7 @@ import com.github.mohaka.friends.domain.exceptions.NetworkException
 import com.github.mohaka.friends.domain.user.InMemoryUserCatalog
 import com.github.mohaka.friends.domain.user.User
 import com.github.mohaka.friends.domain.user.UserCatalog
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -57,7 +58,7 @@ class SignUpScreenTest {
 	}
 
 	@Test
-	fun displayDuplicateAccountError() {
+	fun displayDuplicateAccountError() = runBlocking<Unit> {
 		val signedUpEmail = "alice@friends.com"
 		val signedUpPassword = "P@ssw0rd*"
 
@@ -129,13 +130,13 @@ class SignUpScreenTest {
 	}
 
 	class UnavailableUserCatalog : UserCatalog {
-		override fun createUser(email: String, password: String, about: String): User {
+		override suspend fun createUser(email: String, password: String, about: String): User {
 			throw BackendException()
 		}
 	}
 
 	class OfflineUserCatalog : UserCatalog {
-		override fun createUser(email: String, password: String, about: String): User {
+		override suspend fun createUser(email: String, password: String, about: String): User {
 			throw NetworkException()
 		}
 	}

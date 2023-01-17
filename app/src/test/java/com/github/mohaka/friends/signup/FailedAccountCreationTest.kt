@@ -6,33 +6,34 @@ import com.github.mohaka.friends.domain.user.User
 import com.github.mohaka.friends.domain.user.UserCatalog
 import com.github.mohaka.friends.domain.user.UserRepository
 import com.github.mohaka.friends.signup.state.SignUpState
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class FailedAccountCreationTest {
 
 	@Test
-	fun backendError() {
+	fun backendError() = runBlocking {
 		val userRepository = UserRepository(UnavailableUserCatalog())
 		val result = userRepository.signUp(":email:", ":password:", ":about:")
 		assertEquals(SignUpState.BackendError, result)
 	}
 
 	@Test
-	fun offlineError() {
+	fun offlineError() = runBlocking {
 		val userRepository = UserRepository(OfflineUserCatalog())
 		val result = userRepository.signUp(":email:", ":password:", ":about:")
 		assertEquals(SignUpState.OfflineError, result)
 	}
 
 	class UnavailableUserCatalog : UserCatalog {
-		override fun createUser(email: String, password: String, about: String): User {
+		override suspend fun createUser(email: String, password: String, about: String): User {
 			throw BackendException()
 		}
 	}
 
 	class OfflineUserCatalog : UserCatalog {
-		override fun createUser(email: String, password: String, about: String): User {
+		override suspend fun createUser(email: String, password: String, about: String): User {
 			throw NetworkException()
 		}
 	}

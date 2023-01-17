@@ -3,7 +3,7 @@ package com.github.mohaka.friends.domain.user
 import com.github.mohaka.friends.domain.exceptions.DuplicateAccountException
 
 class InMemoryUserCatalog(private val users: ArrayList<User> = arrayListOf()) : UserCatalog {
-	override fun createUser(email: String, password: String, about: String): User {
+	override suspend fun createUser(email: String, password: String, about: String): User {
 		checkAccountDuplication(email)
 		val userId = generateUuidFor(email)
 		val user = User(userId, email, about)

@@ -6,7 +6,7 @@ import com.github.mohaka.friends.domain.exceptions.NetworkException
 import com.github.mohaka.friends.signup.state.SignUpState
 
 class UserRepository(private val userCatalog: UserCatalog) {
-	public fun signUp(email: String, password: String, about: String) = try {
+	public suspend fun signUp(email: String, password: String, about: String) = try {
 		val user = userCatalog.createUser(email, password, about)
 		SignUpState.SignedUp(user)
 	} catch (e: DuplicateAccountException) {
