@@ -1,6 +1,7 @@
 package com.github.mohaka.friends.signup
 
 import com.github.mohaka.friends.InstantTaskExecuteExtension
+import com.github.mohaka.friends.TestDispatchers
 import com.github.mohaka.friends.domain.user.InMemoryUserCatalog
 import com.github.mohaka.friends.domain.user.User
 import com.github.mohaka.friends.domain.user.UserRepository
@@ -14,7 +15,8 @@ import org.junit.jupiter.api.extension.ExtendWith
 class CreateAccountTest {
 	private val viewModel = SignUpViewModel(
 		RegexCredentialsValidator(),
-		UserRepository(InMemoryUserCatalog())
+		UserRepository(InMemoryUserCatalog()),
+		TestDispatchers(),
 	)
 
 	@Test

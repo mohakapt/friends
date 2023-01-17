@@ -1,6 +1,7 @@
 package com.github.mohaka.friends.signup
 
 import com.github.mohaka.friends.InstantTaskExecuteExtension
+import com.github.mohaka.friends.TestDispatchers
 import com.github.mohaka.friends.domain.user.InMemoryUserCatalog
 import com.github.mohaka.friends.domain.user.UserRepository
 import com.github.mohaka.friends.domain.validation.CredentialsValidationResult
@@ -17,7 +18,8 @@ class CredentialsValidationTest {
 
 	private val viewModel = SignUpViewModel(
 		RegexCredentialsValidator(),
-		UserRepository(InMemoryUserCatalog())
+		UserRepository(InMemoryUserCatalog()),
+		TestDispatchers(),
 	)
 
 	@ParameterizedTest

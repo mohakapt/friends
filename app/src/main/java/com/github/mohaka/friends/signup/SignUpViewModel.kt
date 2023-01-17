@@ -4,17 +4,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.mohaka.friends.TestDispatchers
 import com.github.mohaka.friends.domain.user.UserRepository
 import com.github.mohaka.friends.domain.validation.CredentialsValidationResult
 import com.github.mohaka.friends.domain.validation.RegexCredentialsValidator
 import com.github.mohaka.friends.signup.state.SignUpState
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class SignUpViewModel(
 	private val credentialsValidator: RegexCredentialsValidator,
 	private val userRepository: UserRepository,
+	private val dispatchers: TestDispatchers,
 ) : ViewModel() {
 	private val mutableSignUpState = MutableLiveData<SignUpState>()
 	val signUpState: LiveData<SignUpState> = mutableSignUpState
@@ -26,12 +27,6 @@ class SignUpViewModel(
 			CredentialsValidationResult.Valid -> proceedWithSignUp(email, password, about)
 		}
 	}
-
-	class TestDispatchers {
-		val background = Dispatchers.Unconfined
-	}
-
-	private val dispatchers = TestDispatchers()
 
 	private fun proceedWithSignUp(email: String, password: String, about: String) {
 		viewModelScope.launch {
