@@ -16,13 +16,16 @@ class SignUpViewModel(
 	val signUpState: LiveData<SignUpState> = _mutableSignUpState
 
 	fun createAccount(email: String, password: String, about: String) {
-		val result = credentialsValidator.validate(email, password)
-
-		_mutableSignUpState.value = when (result) {
-			CredentialsValidationResult.InvalidEmail -> SignUpState.BadEmail
-			CredentialsValidationResult.InvalidPassword -> SignUpState.BadPassword
-			CredentialsValidationResult.Valid -> userRepository.signUp(email, password, about)
+		when (credentialsValidator.validate(email, password)) {
+			CredentialsValidationResult.InvalidEmail -> _mutableSignUpState.value = SignUpState.BadEmail
+			CredentialsValidationResult.InvalidPassword -> _mutableSignUpState.value = SignUpState.BadPassword
+			CredentialsValidationResult.Valid -> proceedWithSignUp(email, password, about)
 		}
+	}
+
+	private fun proceedWithSignUp(email: String, password: String, about: String) {
+		_mutableSignUpState.value = SignUpState.Loading
+		_mutableSignUpState.value = userRepository.signUp(email, password, about)
 	}
 }
 
