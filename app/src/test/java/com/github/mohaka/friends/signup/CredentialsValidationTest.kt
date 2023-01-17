@@ -16,9 +16,10 @@ import org.junit.jupiter.params.provider.CsvSource
 @ExtendWith(InstantTaskExecuteExtension::class)
 class CredentialsValidationTest {
 
+	private val userRepository = UserRepository(InMemoryUserCatalog())
 	private val viewModel = SignUpViewModel(
 		RegexCredentialsValidator(),
-		UserRepository(InMemoryUserCatalog()),
+		userRepository,
 		TestDispatchers(),
 	)
 

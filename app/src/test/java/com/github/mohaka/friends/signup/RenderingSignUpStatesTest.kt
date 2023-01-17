@@ -15,7 +15,12 @@ import org.junit.jupiter.api.extension.ExtendWith
 class RenderingSignUpStatesTest {
 
 	private val userRepository = UserRepository(InMemoryUserCatalog())
-	private val viewModel = SignUpViewModel(RegexCredentialsValidator(), userRepository, TestDispatchers())
+	private val viewModel = SignUpViewModel(
+		RegexCredentialsValidator(),
+		userRepository,
+		TestDispatchers()
+	)
+
 	private val tom = User(":tomId:", "tom@friends.com", "about tom")
 
 	@Test

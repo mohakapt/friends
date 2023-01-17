@@ -13,9 +13,11 @@ import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(InstantTaskExecuteExtension::class)
 class CreateAccountTest {
+
+	private val userRepository = UserRepository(InMemoryUserCatalog())
 	private val viewModel = SignUpViewModel(
 		RegexCredentialsValidator(),
-		UserRepository(InMemoryUserCatalog()),
+		userRepository,
 		TestDispatchers(),
 	)
 
