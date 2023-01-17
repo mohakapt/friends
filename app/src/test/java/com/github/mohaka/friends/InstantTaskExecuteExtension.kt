@@ -9,8 +9,9 @@ import org.junit.jupiter.api.extension.AfterAllCallback
 import org.junit.jupiter.api.extension.BeforeAllCallback
 import org.junit.jupiter.api.extension.ExtensionContext
 
-@ExperimentalCoroutinesApi
 class InstantTaskExecuteExtension : BeforeAllCallback, AfterAllCallback {
+
+	@ExperimentalCoroutinesApi
 	override fun beforeAll(context: ExtensionContext?) {
 		Dispatchers.setMain(Dispatchers.Unconfined)
 		ArchTaskExecutor.getInstance().setDelegate(object : TaskExecutor() {
