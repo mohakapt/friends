@@ -7,6 +7,7 @@ import com.github.mohaka.friends.domain.exceptions.NetworkException
 import com.github.mohaka.friends.domain.user.InMemoryUserCatalog
 import com.github.mohaka.friends.domain.user.User
 import com.github.mohaka.friends.domain.user.UserCatalog
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -124,6 +125,18 @@ class SignUpScreenTest {
 		}
 	}
 
+	@Test
+	fun displayBlockingLoading() {
+		replaceUserCatalogWith(DelayingUserCatalog())
+		launchSignUpScreen(signUpTestRule) {
+			typeEmail("max@friends.com")
+			typePassword("P@ssw0rd")
+			submit()
+		} verify {
+			blockingLoadingIsPresent()
+		}
+	}
+
 	@After
 	fun tearDown() {
 		replaceUserCatalogWith(InMemoryUserCatalog())
@@ -138,6 +151,13 @@ class SignUpScreenTest {
 	class OfflineUserCatalog : UserCatalog {
 		override suspend fun createUser(email: String, password: String, about: String): User {
 			throw NetworkException()
+		}
+	}
+
+	class DelayingUserCatalog : UserCatalog {
+		override suspend fun createUser(email: String, password: String, about: String): User {
+			delay(1000)
+			return User("someId", email, about)
 		}
 	}
 

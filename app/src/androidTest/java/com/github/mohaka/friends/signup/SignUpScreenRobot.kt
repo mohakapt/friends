@@ -80,4 +80,10 @@ class SignUpVerification(private val rule: ComposeRule<MainActivity>) {
 		rule.onNodeWithText(badPassword)
 			.assertDoesNotExist()
 	}
+
+	fun blockingLoadingIsPresent() {
+		val loading = rule.activity.getString(R.string.text_loading)
+		rule.onNodeWithTag(loading)
+			.assertIsDisplayed()
+	}
 }

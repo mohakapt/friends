@@ -6,13 +6,16 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -38,6 +41,8 @@ fun SignUpScreen(
 				onSignedUp()
 			}
 		}
+
+		is SignUpState.Loading -> BlockingLoading()
 		is SignUpState.BadEmail -> screenState.isEmailErrorVisible = true
 		is SignUpState.BadPassword -> screenState.isPasswordErrorVisible = true
 		is SignUpState.DuplicateAccount -> screenState.showErrorMessage(R.string.error_duplicateAccount)
@@ -90,13 +95,32 @@ fun SignUpScreen(
 }
 
 @Composable
+fun BlockingLoading() {
+	Box(
+		modifier = Modifier
+			.fillMaxSize()
+			.testTag(stringResource(R.string.text_loading))
+			.background(colors.surface.copy(alpha = 0.7f)),
+		contentAlignment = Alignment.Center
+	) {
+		CircularProgressIndicator()
+	}
+}
+
+@Composable
 fun InfoMessage(
 	isVisible: Boolean,
 	@StringRes messageResId: Int,
 ) {
-	AnimatedVisibility(visible = isVisible, enter = slideInVertically(
-		initialOffsetY = { fullHeight -> -fullHeight }, animationSpec = tween(durationMillis = 200, easing = FastOutSlowInEasing)
-	), exit = slideOutVertically(animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing), targetOffsetY = { fullHeight -> -fullHeight })
+	AnimatedVisibility(
+		visible = isVisible,
+		enter = slideInVertically(
+			initialOffsetY = { fullHeight -> -fullHeight },
+			animationSpec = tween(durationMillis = 200, easing = FastOutSlowInEasing)
+		), exit = slideOutVertically(
+			animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing),
+			targetOffsetY = { fullHeight -> -fullHeight }
+		)
 	) {
 		Surface(
 			modifier = Modifier.fillMaxWidth(),
