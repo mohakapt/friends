@@ -42,9 +42,9 @@ fun SignUpScreen(
 			}
 		}
 
-		is SignUpState.Loading -> BlockingLoading()
-		is SignUpState.BadEmail -> screenState.isEmailErrorVisible = true
-		is SignUpState.BadPassword -> screenState.isPasswordErrorVisible = true
+		is SignUpState.Loading -> screenState.toggleLoading()
+		is SignUpState.BadEmail -> screenState.showEmailError()
+		is SignUpState.BadPassword -> screenState.showPasswordError()
 		is SignUpState.DuplicateAccount -> screenState.showErrorMessage(R.string.error_duplicateAccount)
 		is SignUpState.BackendError -> screenState.showErrorMessage(R.string.error_backendError)
 		is SignUpState.OfflineError -> screenState.showErrorMessage(R.string.error_noConnection)
@@ -89,8 +89,13 @@ fun SignUpScreen(
 		}
 
 		InfoMessage(
-			isVisible = screenState.isErrorVisible, messageResId = screenState.errorMessage
+			isVisible = screenState.isErrorVisible,
+			messageResId = screenState.errorMessage
 		)
+
+		if (screenState.isLoading) {
+			BlockingLoading()
+		}
 	}
 }
 
