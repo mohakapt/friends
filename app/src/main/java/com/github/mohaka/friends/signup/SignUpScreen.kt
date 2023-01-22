@@ -2,8 +2,12 @@ package com.github.mohaka.friends.signup
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
@@ -93,22 +97,32 @@ fun SignUpScreen(
 			messageResId = screenState.errorMessage
 		)
 
-		if (screenState.isLoading) {
-			BlockingLoading()
-		}
+		BlockingLoading(screenState.isLoading)
 	}
 }
 
 @Composable
-fun BlockingLoading() {
-	Box(
-		modifier = Modifier
-			.fillMaxSize()
-			.testTag(stringResource(R.string.text_loading))
-			.background(colors.surface.copy(alpha = 0.7f)),
-		contentAlignment = Alignment.Center
+fun BlockingLoading(isVisible: Boolean) {
+	AnimatedVisibility(
+		visible = isVisible,
+		enter = fadeIn(
+			initialAlpha = 0f,
+			animationSpec = tween(durationMillis = 200, easing = FastOutLinearInEasing)
+		),
+		exit = fadeOut(
+			targetAlpha = 0f,
+			animationSpec = tween(durationMillis = 250, easing = LinearOutSlowInEasing)
+		)
 	) {
-		CircularProgressIndicator()
+		Box(
+			modifier = Modifier
+				.fillMaxSize()
+				.testTag(stringResource(R.string.text_loading))
+				.background(colors.surface.copy(alpha = 0.7f)),
+			contentAlignment = Alignment.Center
+		) {
+			CircularProgressIndicator()
+		}
 	}
 }
 
