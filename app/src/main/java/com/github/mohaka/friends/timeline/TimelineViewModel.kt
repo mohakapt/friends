@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.github.mohaka.friends.domain.post.Post
+import com.github.mohaka.friends.domain.user.Following
 import com.github.mohaka.friends.timeline.state.TimelineState
 
 class TimelineViewModel : ViewModel() {
@@ -31,9 +32,4 @@ class TimelineViewModel : ViewModel() {
 		val posts = availablePosts.filter { userIds.contains(it.userUuid) }
 		mutableSignUpState.value = TimelineState.Posts(posts)
 	}
-
-	data class Following(
-		val userUuid: String,
-		val followingUuid: String,
-	)
 }
