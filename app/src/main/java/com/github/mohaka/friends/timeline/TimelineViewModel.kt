@@ -19,17 +19,21 @@ class TimelineViewModel : ViewModel() {
 			Post("post3", "saraId", "Content of post 3", 3L),
 		)
 
-		if (userUuid == "saraId") {
-			val posts = availablePosts.filter { it.userUuid == "lucyId" || it.userUuid == "saraId" }
-			mutableSignUpState.value = TimelineState.Posts(posts)
-		} else if (userUuid == "annaId") {
-			val posts = availablePosts.filter { it.userUuid == "lucyId" }
-			mutableSignUpState.value = TimelineState.Posts(posts)
-		} else if (userUuid == "timId") {
-			val posts = availablePosts.filter { it.userUuid == userUuid }
-			mutableSignUpState.value = TimelineState.Posts(posts)
-		} else {
-			mutableSignUpState.value = TimelineState.Posts(emptyList())
-		}
+		val followings = listOf(
+			Following("saraId", "lucyId"),
+			Following("annaId", "lucyId"),
+		)
+
+		val userIds = listOf(userUuid) + followings
+			.filter { it.userUuid == userUuid }
+			.map { it.followingUuid }
+
+		val posts = availablePosts.filter { userIds.contains(it.userUuid) }
+		mutableSignUpState.value = TimelineState.Posts(posts)
 	}
+
+	data class Following(
+		val userUuid: String,
+		val followingUuid: String,
+	)
 }
