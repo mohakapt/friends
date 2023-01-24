@@ -11,8 +11,8 @@ class TimelineViewModel : ViewModel() {
 	val timelineState: LiveData<TimelineState> = mutableSignUpState
 
 	fun timelineFor(userUuid: String) {
-		if (userUuid.contains("jason")) {
-			val post = Post(":postId:", userUuid, ":Some content:", 1L)
+		if (userUuid.contains("tim")) {
+			val post = Post("postId", userUuid, "Some content", 1L)
 			val posts = listOf(post)
 			mutableSignUpState.value = TimelineState.Posts(posts)
 		} else {

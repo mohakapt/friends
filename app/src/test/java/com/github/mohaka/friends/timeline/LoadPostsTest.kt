@@ -2,7 +2,7 @@ package com.github.mohaka.friends.timeline
 
 import com.github.mohaka.friends.InstantTaskExecuteExtension
 import com.github.mohaka.friends.domain.post.Post
-import com.github.mohaka.friends.domain.user.User
+import com.github.mohaka.friends.infrastructure.builder.UserBuilder
 import com.github.mohaka.friends.timeline.state.TimelineState
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -22,11 +22,11 @@ class LoadPostsTest {
 	@Test
 	fun postsAvailable() {
 		val viewModel = TimelineViewModel()
-		val jason = User(":jasonId:", "jason@friends.com", ":about jason:")
-		val jasonPosts = arrayListOf(Post(":postId:", jason.uuid, ":Some content:", 1L))
+		val tim = UserBuilder.aUser().withUuid("timId").build()
+		val timPosts = arrayListOf(Post("postId", tim.uuid, "Some content", 1L))
 
-		viewModel.timelineFor(jason.uuid)
+		viewModel.timelineFor(tim.uuid)
 
-		assertEquals(TimelineState.Posts(jasonPosts), viewModel.timelineState.value)
+		assertEquals(TimelineState.Posts(timPosts), viewModel.timelineState.value)
 	}
 }
