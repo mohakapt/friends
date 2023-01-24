@@ -11,15 +11,16 @@ class TimelineViewModel : ViewModel() {
 	val timelineState: LiveData<TimelineState> = mutableSignUpState
 
 	fun timelineFor(userUuid: String) {
+		val availablePosts = listOf(
+			Post("postId", userUuid, "Some content", 1L),
+			Post("post2", "lucyId", "Content of post 2", 2L),
+			Post("post1", "lucyId", "Content of post 1", 1L),
+		)
 		if (userUuid == "annaId") {
-			val posts = listOf(
-				Post("post2", "lucyId", "Content of post 2", 2L),
-				Post("post1", "lucyId", "Content of post 1", 1L),
-			)
+			val posts = availablePosts.filter { it.userUuid == "lucyId" }
 			mutableSignUpState.value = TimelineState.Posts(posts)
 		} else if (userUuid == "timId") {
-			val post = Post("postId", userUuid, "Some content", 1L)
-			val posts = listOf(post)
+			val posts = availablePosts.filter { it.userUuid == userUuid }
 			mutableSignUpState.value = TimelineState.Posts(posts)
 		} else {
 			mutableSignUpState.value = TimelineState.Posts(emptyList())
