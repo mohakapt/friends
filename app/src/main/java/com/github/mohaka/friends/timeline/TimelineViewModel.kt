@@ -12,11 +12,17 @@ class TimelineViewModel : ViewModel() {
 
 	fun timelineFor(userUuid: String) {
 		val availablePosts = listOf(
-			Post("postId", userUuid, "Some content", 1L),
+			Post("postId", "timId", "Some content", 1L),
 			Post("post2", "lucyId", "Content of post 2", 2L),
 			Post("post1", "lucyId", "Content of post 1", 1L),
+			Post("post4", "saraId", "Content of post 4", 4L),
+			Post("post3", "saraId", "Content of post 3", 3L),
 		)
-		if (userUuid == "annaId") {
+
+		if (userUuid == "saraId") {
+			val posts = availablePosts.filter { it.userUuid == "lucyId" || it.userUuid == "saraId" }
+			mutableSignUpState.value = TimelineState.Posts(posts)
+		} else if (userUuid == "annaId") {
 			val posts = availablePosts.filter { it.userUuid == "lucyId" }
 			mutableSignUpState.value = TimelineState.Posts(posts)
 		} else if (userUuid == "timId") {
