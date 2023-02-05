@@ -1,7 +1,9 @@
 package com.github.mohaka.friends.timeline
 
 import com.github.mohaka.friends.InstantTaskExecuteExtension
+import com.github.mohaka.friends.domain.post.InMemoryPostCatalog
 import com.github.mohaka.friends.domain.post.Post
+import com.github.mohaka.friends.domain.user.InMemoryUserCatalog
 import com.github.mohaka.friends.infrastructure.builder.UserBuilder.Companion.aUser
 import com.github.mohaka.friends.timeline.state.TimelineState
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -12,7 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 class LoadPostsTest {
 	@Test
 	fun noPostsAvailable() {
-		val viewModel = TimelineViewModel()
+		val viewModel = TimelineViewModel(InMemoryUserCatalog(), InMemoryPostCatalog())
 
 		viewModel.timelineFor("topId")
 
@@ -21,7 +23,7 @@ class LoadPostsTest {
 
 	@Test
 	fun postsAvailable() {
-		val viewModel = TimelineViewModel()
+		val viewModel = TimelineViewModel(InMemoryUserCatalog(), InMemoryPostCatalog())
 		val tim = aUser().withUuid("timId").build()
 		val timPosts = arrayListOf(Post("postId", tim.uuid, "Some content", 1L))
 
@@ -39,7 +41,7 @@ class LoadPostsTest {
 			Post("post1", lucy.uuid, "Content of post 1", 1L),
 		)
 
-		val viewModel = TimelineViewModel()
+		val viewModel = TimelineViewModel(InMemoryUserCatalog(), InMemoryPostCatalog())
 		viewModel.timelineFor(anna.uuid)
 
 		assertEquals(TimelineState.Posts(lucyPosts), viewModel.timelineState.value)
@@ -59,7 +61,7 @@ class LoadPostsTest {
 			Post("post3", sara.uuid, "Content of post 3", 3L),
 		)
 
-		val viewModel = TimelineViewModel()
+		val viewModel = TimelineViewModel(InMemoryUserCatalog(), InMemoryPostCatalog())
 		viewModel.timelineFor(sara.uuid)
 		assertEquals(TimelineState.Posts(lucyPosts + saraPosts), viewModel.timelineState.value)
 	}
