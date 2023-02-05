@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.mohaka.friends.domain.exceptions.BackendException
+import com.github.mohaka.friends.domain.exceptions.ConnectionException
 import com.github.mohaka.friends.domain.post.PostCatalog
 import com.github.mohaka.friends.domain.user.UserCatalog
 import com.github.mohaka.friends.timeline.state.TimelineState
@@ -25,6 +26,8 @@ class TimelineViewModel(
 			mutableTimelineState.value = TimelineState.Posts(posts)
 		} catch (e: BackendException) {
 			mutableTimelineState.value = TimelineState.BackendError
+		} catch (e: ConnectionException) {
+			mutableTimelineState.value = TimelineState.OfflineError
 		}
 	}
 }

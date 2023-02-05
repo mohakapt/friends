@@ -2,6 +2,7 @@ package com.github.mohaka.friends.timeline
 
 import com.github.mohaka.friends.InstantTaskExecuteExtension
 import com.github.mohaka.friends.domain.exceptions.BackendException
+import com.github.mohaka.friends.domain.exceptions.ConnectionException
 import com.github.mohaka.friends.domain.post.Post
 import com.github.mohaka.friends.domain.post.PostCatalog
 import com.github.mohaka.friends.domain.user.InMemoryUserCatalog
@@ -24,10 +25,26 @@ class FailTimelineLoadingTest {
 		assertEquals(TimelineState.BackendError, viewModel.timelineState.value)
 	}
 
+	@Test
+	fun offlineError() {
+		val userCatalog = InMemoryUserCatalog()
+		val postCatalog = OfflinePostCatalog()
+		val viewModel = TimelineViewModel(userCatalog, postCatalog)
+
+		viewModel.timelineFor(":userId:")
+
+		assertEquals(TimelineState.OfflineError, viewModel.timelineState.value)
+	}
+
 	class UnavailablePostCatalog : PostCatalog {
 		override fun postsFor(userUuids: List<String>): List<Post> {
 			throw BackendException()
 		}
+	}
 
+	class OfflinePostCatalog : PostCatalog {
+		override fun postsFor(userUuids: List<String>): List<Post> {
+			throw ConnectionException()
+		}
 	}
 }
