@@ -4,14 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.mohaka.friends.domain.post.InMemoryPostCatalog
+import com.github.mohaka.friends.domain.post.PostCatalog
 import com.github.mohaka.friends.domain.user.UserCatalog
 import com.github.mohaka.friends.timeline.state.TimelineState
 import kotlinx.coroutines.launch
 
 class TimelineViewModel(
 	private val userCatalog: UserCatalog,
-	private val postCatalog: InMemoryPostCatalog,
+	private val postCatalog: PostCatalog,
 ) : ViewModel() {
 
 	private val mutableSignUpState = MutableLiveData<TimelineState>()
