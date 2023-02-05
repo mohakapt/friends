@@ -12,7 +12,7 @@ class InMemoryUserCatalog(private val users: ArrayList<User> = arrayListOf()) : 
 		return user
 	}
 
-	fun followedBy(userUuid: String): List<String> {
+	override suspend fun followedBy(userUuid: String): List<String> {
 		val followings = listOf(
 			Following("saraId", "lucyId"),
 			Following("annaId", "lucyId"),

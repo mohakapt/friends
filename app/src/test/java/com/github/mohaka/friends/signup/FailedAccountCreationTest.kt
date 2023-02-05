@@ -30,11 +30,19 @@ class FailedAccountCreationTest {
 		override suspend fun createUser(email: String, password: String, about: String): User {
 			throw BackendException()
 		}
+
+		override suspend fun followedBy(userUuid: String): List<String> {
+			return emptyList()
+		}
 	}
 
 	class OfflineUserCatalog : UserCatalog {
 		override suspend fun createUser(email: String, password: String, about: String): User {
 			throw NetworkException()
+		}
+
+		override suspend fun followedBy(userUuid: String): List<String> {
+			return emptyList()
 		}
 	}
 }
