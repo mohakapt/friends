@@ -32,7 +32,7 @@ class FailedAccountCreationTest {
 		}
 
 		override suspend fun followedBy(userUuid: String): List<String> {
-			return emptyList()
+			TODO("Not yet implemented")
 		}
 	}
 
@@ -42,7 +42,7 @@ class FailedAccountCreationTest {
 		}
 
 		override suspend fun followedBy(userUuid: String): List<String> {
-			return emptyList()
+			TODO("Not yet implemented")
 		}
 	}
 }

@@ -32,10 +32,6 @@ class LoadPostsTest {
 	)
 
 	private val availablePosts = timPosts + lucyPosts + saraPosts
-	private val followings = listOf(
-		Following(anna.uuid, lucy.uuid),
-		Following(sara.uuid, lucy.uuid)
-	)
 
 	@Test
 	fun noPostsAvailable() {
@@ -63,6 +59,9 @@ class LoadPostsTest {
 
 	@Test
 	fun postsFromFriends() {
+		val followings = listOf(
+			Following(anna.uuid, lucy.uuid)
+		)
 		val viewModel = TimelineViewModel(
 			InMemoryUserCatalog(followings = followings),
 			InMemoryPostCatalog(availablePosts)
@@ -75,6 +74,9 @@ class LoadPostsTest {
 
 	@Test
 	fun postsFromMeAndFriends() {
+		val followings = listOf(
+			Following(sara.uuid, lucy.uuid)
+		)
 		val viewModel = TimelineViewModel(
 			InMemoryUserCatalog(followings = followings),
 			InMemoryPostCatalog(availablePosts)

@@ -146,11 +146,19 @@ class SignUpScreenTest {
 		override suspend fun createUser(email: String, password: String, about: String): User {
 			throw BackendException()
 		}
+
+		override suspend fun followedBy(userUuid: String): List<String> {
+			TODO("Not yet implemented")
+		}
 	}
 
 	class OfflineUserCatalog : UserCatalog {
 		override suspend fun createUser(email: String, password: String, about: String): User {
 			throw NetworkException()
+		}
+
+		override suspend fun followedBy(userUuid: String): List<String> {
+			TODO("Not yet implemented")
 		}
 	}
 
@@ -158,6 +166,10 @@ class SignUpScreenTest {
 		override suspend fun createUser(email: String, password: String, about: String): User {
 			delay(1000)
 			return User("someId", email, about)
+		}
+
+		override suspend fun followedBy(userUuid: String): List<String> {
+			TODO("Not yet implemented")
 		}
 	}
 
