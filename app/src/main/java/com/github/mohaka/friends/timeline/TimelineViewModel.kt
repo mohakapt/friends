@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.mohaka.friends.domain.exceptions.BackendException
 import com.github.mohaka.friends.domain.post.PostCatalog
 import com.github.mohaka.friends.domain.user.UserCatalog
 import com.github.mohaka.friends.timeline.state.TimelineState
@@ -14,13 +15,16 @@ class TimelineViewModel(
 	private val postCatalog: PostCatalog,
 ) : ViewModel() {
 
-	private val mutableSignUpState = MutableLiveData<TimelineState>()
-	val timelineState: LiveData<TimelineState> = mutableSignUpState
+	private val mutableTimelineState = MutableLiveData<TimelineState>()
+	val timelineState: LiveData<TimelineState> = mutableTimelineState
 
 	fun timelineFor(userUuid: String) = viewModelScope.launch {
-		val userIds = listOf(userUuid) + userCatalog.followedBy(userUuid)
-
-		val posts = postCatalog.postsFor(userIds)
-		mutableSignUpState.value = TimelineState.Posts(posts)
+		try {
+			val userIds = listOf(userUuid) + userCatalog.followedBy(userUuid)
+			val posts = postCatalog.postsFor(userIds)
+			mutableTimelineState.value = TimelineState.Posts(posts)
+		} catch (e: BackendException) {
+			mutableTimelineState.value = TimelineState.BackendError
+		}
 	}
 }
