@@ -2,7 +2,7 @@ package com.github.mohaka.friends.domain.user
 
 import com.github.mohaka.friends.domain.exceptions.BackendException
 import com.github.mohaka.friends.domain.exceptions.DuplicateAccountException
-import com.github.mohaka.friends.domain.exceptions.NetworkException
+import com.github.mohaka.friends.domain.exceptions.ConnectionException
 import com.github.mohaka.friends.signup.state.SignUpState
 
 class UserRepository(private val userCatalog: UserCatalog) {
@@ -13,7 +13,7 @@ class UserRepository(private val userCatalog: UserCatalog) {
 		SignUpState.DuplicateAccount
 	} catch (e: BackendException) {
 		SignUpState.BackendError
-	} catch (e: NetworkException) {
+	} catch (e: ConnectionException) {
 		SignUpState.OfflineError
 	}
 }

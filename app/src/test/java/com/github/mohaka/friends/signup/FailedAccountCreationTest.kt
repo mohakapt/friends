@@ -1,7 +1,7 @@
 package com.github.mohaka.friends.signup
 
 import com.github.mohaka.friends.domain.exceptions.BackendException
-import com.github.mohaka.friends.domain.exceptions.NetworkException
+import com.github.mohaka.friends.domain.exceptions.ConnectionException
 import com.github.mohaka.friends.domain.user.User
 import com.github.mohaka.friends.domain.user.UserCatalog
 import com.github.mohaka.friends.domain.user.UserRepository
@@ -38,7 +38,7 @@ class FailedAccountCreationTest {
 
 	class OfflineUserCatalog : UserCatalog {
 		override suspend fun createUser(email: String, password: String, about: String): User {
-			throw NetworkException()
+			throw ConnectionException()
 		}
 
 		override suspend fun followedBy(userUuid: String): List<String> {

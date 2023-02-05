@@ -3,7 +3,7 @@ package com.github.mohaka.friends.signup
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.github.mohaka.friends.MainActivity
 import com.github.mohaka.friends.domain.exceptions.BackendException
-import com.github.mohaka.friends.domain.exceptions.NetworkException
+import com.github.mohaka.friends.domain.exceptions.ConnectionException
 import com.github.mohaka.friends.domain.user.InMemoryUserCatalog
 import com.github.mohaka.friends.domain.user.User
 import com.github.mohaka.friends.domain.user.UserCatalog
@@ -154,7 +154,7 @@ class SignUpScreenTest {
 
 	class OfflineUserCatalog : UserCatalog {
 		override suspend fun createUser(email: String, password: String, about: String): User {
-			throw NetworkException()
+			throw ConnectionException()
 		}
 
 		override suspend fun followedBy(userUuid: String): List<String> {
