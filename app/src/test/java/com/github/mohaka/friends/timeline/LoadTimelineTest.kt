@@ -1,6 +1,7 @@
 package com.github.mohaka.friends.timeline
 
 import com.github.mohaka.friends.InstantTaskExecuteExtension
+import com.github.mohaka.friends.domain.TimelineRepository
 import com.github.mohaka.friends.domain.post.InMemoryPostCatalog
 import com.github.mohaka.friends.domain.post.Post
 import com.github.mohaka.friends.domain.user.Following
@@ -35,10 +36,9 @@ class LoadTimelineTest {
 
 	@Test
 	fun noPostsAvailable() {
-		val viewModel = TimelineViewModel(
-			InMemoryUserCatalog(),
-			InMemoryPostCatalog(availablePosts)
-		)
+		val userCatalog = InMemoryUserCatalog()
+		val postCatalog = InMemoryPostCatalog(availablePosts)
+		val viewModel = TimelineViewModel(TimelineRepository(userCatalog, postCatalog))
 
 		viewModel.timelineFor("tomId")
 
@@ -47,10 +47,9 @@ class LoadTimelineTest {
 
 	@Test
 	fun postsAvailable() {
-		val viewModel = TimelineViewModel(
-			InMemoryUserCatalog(),
-			InMemoryPostCatalog(availablePosts)
-		)
+		val userCatalog = InMemoryUserCatalog()
+		val postCatalog = InMemoryPostCatalog(availablePosts)
+		val viewModel = TimelineViewModel(TimelineRepository(userCatalog, postCatalog))
 
 		viewModel.timelineFor(tim.uuid)
 
@@ -62,10 +61,9 @@ class LoadTimelineTest {
 		val followings = listOf(
 			Following(anna.uuid, lucy.uuid)
 		)
-		val viewModel = TimelineViewModel(
-			InMemoryUserCatalog(followings = followings),
-			InMemoryPostCatalog(availablePosts)
-		)
+		val userCatalog = InMemoryUserCatalog(followings = followings)
+		val postCatalog = InMemoryPostCatalog(availablePosts)
+		val viewModel = TimelineViewModel(TimelineRepository(userCatalog, postCatalog))
 
 		viewModel.timelineFor(anna.uuid)
 
@@ -77,10 +75,9 @@ class LoadTimelineTest {
 		val followings = listOf(
 			Following(sara.uuid, lucy.uuid)
 		)
-		val viewModel = TimelineViewModel(
-			InMemoryUserCatalog(followings = followings),
-			InMemoryPostCatalog(availablePosts)
-		)
+		val userCatalog = InMemoryUserCatalog(followings = followings)
+		val postCatalog = InMemoryPostCatalog(availablePosts)
+		val viewModel = TimelineViewModel(TimelineRepository(userCatalog, postCatalog))
 
 		viewModel.timelineFor(sara.uuid)
 

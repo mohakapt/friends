@@ -1,6 +1,7 @@
 package com.github.mohaka.friends.timeline
 
 import com.github.mohaka.friends.InstantTaskExecuteExtension
+import com.github.mohaka.friends.domain.TimelineRepository
 import com.github.mohaka.friends.domain.exceptions.BackendException
 import com.github.mohaka.friends.domain.exceptions.ConnectionException
 import com.github.mohaka.friends.domain.post.Post
@@ -18,7 +19,7 @@ class FailTimelineLoadingTest {
 	fun backendError() {
 		val userCatalog = InMemoryUserCatalog()
 		val postCatalog = UnavailablePostCatalog()
-		val viewModel = TimelineViewModel(userCatalog, postCatalog)
+		val viewModel = TimelineViewModel(TimelineRepository(userCatalog, postCatalog))
 
 		viewModel.timelineFor(":userId:")
 
@@ -29,7 +30,7 @@ class FailTimelineLoadingTest {
 	fun offlineError() {
 		val userCatalog = InMemoryUserCatalog()
 		val postCatalog = OfflinePostCatalog()
-		val viewModel = TimelineViewModel(userCatalog, postCatalog)
+		val viewModel = TimelineViewModel(TimelineRepository(userCatalog, postCatalog))
 
 		viewModel.timelineFor(":userId:")
 

@@ -11,14 +11,13 @@ import com.github.mohaka.friends.timeline.state.TimelineState
 import kotlinx.coroutines.launch
 
 class TimelineViewModel(
-	private val userCatalog: UserCatalog,
-	private val postCatalog: PostCatalog,
+	private val timelineRepository: TimelineRepository,
 ) : ViewModel() {
 
 	private val mutableTimelineState = MutableLiveData<TimelineState>()
 	val timelineState: LiveData<TimelineState> = mutableTimelineState
 
 	fun timelineFor(userUuid: String) = viewModelScope.launch {
-		mutableTimelineState.value = TimelineRepository(userCatalog, postCatalog).getTimelineFor(userUuid)
+		mutableTimelineState.value = timelineRepository.getTimelineFor(userUuid)
 	}
 }
